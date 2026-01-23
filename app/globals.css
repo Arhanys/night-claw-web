@@ -1,26 +1,82 @@
 @import "tailwindcss";
 
+@theme {
+  --color-background: var(--bg-main);
+  --color-card: var(--bg-card);
+  --color-accent: var(--accent-primary);
+  --color-accent-secondary: var(--accent-secondary);
+  --color-text: var(--text-main);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-main: #F8FAFC;
+  --bg-card: #FFFFFF;
+  --accent-primary: #4338CA;
+  --accent-secondary: #059669;
+  --text-main: #0F172A;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.dark {
+  --bg-main: #0B0E14;
+  --bg-card: #151921;
+  --accent-primary: #5865F2;
+  --accent-secondary: #10B981;
+  --text-main: #E2E8F0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer utilities {
+  .link-underline {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* Fix anchor link positioning for sticky navbar */
+  :target {
+    scroll-margin-top: 5rem; /* 80px - slightly more than navbar height for better spacing */
+  }
+  
+  /* Alternative: apply to specific heading elements */
+  h1[id], h2[id], h3[id], h4[id], h5[id], h6[id] {
+    scroll-margin-top: 5rem;
+  }
+
+  .link-underline::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: 0px;
+    left: 0;
+    background-color: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.25s ease-out;
+  }
+
+  .link-underline:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+
+/* Custom theming */
+
+*{
+  scroll-behavior: smooth;
+}
+
+h1{
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+h2{
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+h3{
+  font-weight: bold;
+  font-size: 1.125rem;
 }
