@@ -1,7 +1,10 @@
 import { Button } from "@/components/ui/button";
+import { getI18n } from "@/locales/server";
 import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
+  const t = await getI18n();
+
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
@@ -11,19 +14,21 @@ export default function Home() {
           <div className="mx-auto max-w-4xl">
             <div className="mb-8">
               <span className="inline-block px-4 py-2 bg-accent/20 text-accent rounded-full text-sm font-medium mb-4">
-                🎉 Now Available for Your Server!
+                {t("home.hero.badgeTitle")}
               </span>
             </div>
 
             <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-6 leading-tight">
-              Meet <span className="text-accent">NightClaw</span>
+              {t("home.hero.title")}
+              <span className="text-accent">
+                {t("home.hero.titleHighlight")}
+              </span>
             </h1>
 
             <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-              The most powerful and intuitive Discord moderation bot,
+              {t("home.hero.subtitle")}
               <span className="text-accent-secondary font-semibold">
-                {" "}
-                built by moderators, for moderators
+                {t("home.hero.subtitleHighlight")}
               </span>
             </p>
 
@@ -32,25 +37,25 @@ export default function Home() {
                 size="lg"
                 className="text-lg px-8 py-4 shadow-lg hover:shadow-xl transition-shadow"
               >
-                🚀 Add to Discord
+                {t("home.hero.ctaPrimary")}
               </Button>
               <Button variant="outline" size="lg" className="text-lg px-8 py-4">
-                <Link href="/guide#top">📖 View Commands</Link>
+                <Link href="/guide#top">{t("home.hero.ctaSecondary")}</Link>
               </Button>
             </div>
 
             <div className="flex flex-wrap justify-center gap-8 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                <span>Active & Growing</span>
+                <span>{t("home.hero.bulletOne")}</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 bg-accent rounded-full"></span>
-                <span>New & Improved</span>
+                <span>{t("home.hero.bulletTwo")}</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 bg-accent-secondary rounded-full"></span>
-                <span>Built by Moderators</span>
+                <span>{t("home.hero.bulletThree")}</span>
               </div>
             </div>
           </div>
@@ -62,11 +67,10 @@ export default function Home() {
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-foreground mb-4">
-              Why Choose NightClaw?
+              {t("home.cards.title")}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Experience moderation like never before with features designed by
-              real moderators
+              {t("home.cards.subtitle")}
             </p>
           </div>
 
@@ -76,11 +80,10 @@ export default function Home() {
                 <span className="text-2xl">⚡</span>
               </div>
               <h3 className="text-xl font-bold text-foreground mb-4">
-                Lightning Fast
+                {t("home.cards.cardOne.title")}
               </h3>
               <p className="text-muted-foreground leading-relaxed">
-                Instant responses to moderation commands. No delays, no waiting
-                - just pure efficiency when you need it most.
+                {t("home.cards.cardOne.description")}
               </p>
             </div>
 
@@ -89,11 +92,10 @@ export default function Home() {
                 <span className="text-2xl">🛡️</span>
               </div>
               <h3 className="text-xl font-bold text-foreground mb-4">
-                Advanced Moderation
+                {t("home.cards.cardTwo.title")}
               </h3>
               <p className="text-muted-foreground leading-relaxed">
-                Comprehensive moderation tools including warns, mutes, kicks,
-                bans, and detailed sanction tracking.
+                {t("home.cards.cardTwo.description")}
               </p>
             </div>
 
@@ -102,11 +104,10 @@ export default function Home() {
                 <span className="text-2xl">🎯</span>
               </div>
               <h3 className="text-xl font-bold text-foreground mb-4">
-                Intuitive Design
+                {t("home.cards.cardThree.title")}
               </h3>
               <p className="text-muted-foreground leading-relaxed">
-                Commands that make sense. No complex syntax or confusing
-                parameters - just simple, effective moderation.
+                {t("home.cards.cardThree.description")}
               </p>
             </div>
           </div>
@@ -118,24 +119,36 @@ export default function Home() {
         <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-4 gap-8 text-center">
             <div>
-              <div className="text-3xl font-bold text-accent mb-2">2025</div>
-              <div className="text-muted-foreground">Created with Care</div>
+              <div className="text-3xl font-bold text-accent mb-2">
+                {t("home.statSection.statOne.title")}
+              </div>
+              <div className="text-muted-foreground">
+                {t("home.statSection.statOne.text")}
+              </div>
             </div>
             <div>
               <div className="text-3xl font-bold text-accent-secondary mb-2">
-                Fresh
+                {t("home.statSection.statTwo.title")}
               </div>
-              <div className="text-muted-foreground">Modern Codebase</div>
+              <div className="text-muted-foreground">
+                {t("home.statSection.statTwo.text")}
+              </div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-accent mb-2">Growing</div>
-              <div className="text-muted-foreground">Community</div>
+              <div className="text-3xl font-bold text-accent mb-2">
+                {t("home.statSection.statThree.title")}
+              </div>
+              <div className="text-muted-foreground">
+                {t("home.statSection.statThree.text")}
+              </div>
             </div>
             <div>
               <div className="text-3xl font-bold text-accent-secondary mb-2">
-                Active
+                {t("home.statSection.statFour.title")}
               </div>
-              <div className="text-muted-foreground">Development</div>
+              <div className="text-muted-foreground">
+                {t("home.statSection.statFour.text")}
+              </div>
             </div>
           </div>
         </div>
@@ -146,10 +159,10 @@ export default function Home() {
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-foreground mb-4">
-              Simple Yet Powerful Commands
+              {t("home.commandExample.title")}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Every command is designed with real moderation scenarios in mind
+              {t("home.commandExample.subtitle")}
             </p>
           </div>
 
@@ -157,25 +170,43 @@ export default function Home() {
             <div className="grid md:grid-cols-2 gap-8">
               <div>
                 <h3 className="text-lg font-semibold text-foreground mb-4">
-                  Quick Actions
+                  {t("home.commandExample.commandCard.titleOne")}
                 </h3>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
-                    <span className="font-mono text-accent">/warn</span>
+                    <span className="font-mono text-accent">
+                      {t(
+                        "home.commandExample.commandCard.commandFirstColumn.commandOne",
+                      )}
+                    </span>
                     <span className="text-muted-foreground">
-                      Issue warnings with reason
+                      {t(
+                        "home.commandExample.commandCard.commandFirstColumn.commandOneDesc",
+                      )}
                     </span>
                   </div>
                   <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
-                    <span className="font-mono text-accent">/mute</span>
+                    <span className="font-mono text-accent">
+                      {t(
+                        "home.commandExample.commandCard.commandFirstColumn.commandTwo",
+                      )}
+                    </span>
                     <span className="text-muted-foreground">
-                      Temporary mutes in minutes
+                      {t(
+                        "home.commandExample.commandCard.commandFirstColumn.commandTwoDesc",
+                      )}
                     </span>
                   </div>
                   <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
-                    <span className="font-mono text-accent">/clear</span>
+                    <span className="font-mono text-accent">
+                      {t(
+                        "home.commandExample.commandCard.commandFirstColumn.commandThree",
+                      )}
+                    </span>
                     <span className="text-muted-foreground">
-                      Bulk message cleanup
+                      {t(
+                        "home.commandExample.commandCard.commandFirstColumn.commandThreeDesc",
+                      )}
                     </span>
                   </div>
                 </div>
@@ -183,31 +214,43 @@ export default function Home() {
 
               <div>
                 <h3 className="text-lg font-semibold text-foreground mb-4">
-                  Server Setup
+                  {t("home.commandExample.commandCard.titleTwo")}
                 </h3>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
                     <span className="font-mono text-accent-secondary">
-                      /setup
+                      {t(
+                        "home.commandExample.commandCard.commandSecondColumn.commandOne",
+                      )}
                     </span>
                     <span className="text-muted-foreground">
-                      Configure bot settings
+                      {t(
+                        "home.commandExample.commandCard.commandSecondColumn.commandOneDesc",
+                      )}
                     </span>
                   </div>
                   <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
                     <span className="font-mono text-accent-secondary">
-                      /ticketsetup
+                      {t(
+                        "home.commandExample.commandCard.commandSecondColumn.commandTwo",
+                      )}
                     </span>
                     <span className="text-muted-foreground">
-                      Support ticket system
+                      {t(
+                        "home.commandExample.commandCard.commandSecondColumn.commandTwoDesc",
+                      )}
                     </span>
                   </div>
                   <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
                     <span className="font-mono text-accent-secondary">
-                      /sanction
+                      {t(
+                        "home.commandExample.commandCard.commandSecondColumn.commandThree",
+                      )}
                     </span>
                     <span className="text-muted-foreground">
-                      View user history
+                      {t(
+                        "home.commandExample.commandCard.commandSecondColumn.commandThreeDesc",
+                      )}
                     </span>
                   </div>
                 </div>
@@ -216,7 +259,9 @@ export default function Home() {
 
             <div className="text-center mt-8">
               <Link href="/guide">
-                <Button variant="outline">View All Commands →</Button>
+                <Button variant="outline">
+                  {t("home.commandExample.commandCard.guideCta")}
+                </Button>
               </Link>
             </div>
           </div>
@@ -228,21 +273,20 @@ export default function Home() {
         <div className="container mx-auto px-6 text-center">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-4xl font-bold text-foreground mb-6">
-              Ready to Transform Your Server?
+              {t("home.footerSection.title")}
             </h2>
             <p className="text-xl text-muted-foreground mb-8">
-              Join thousands of server owners who trust NightClaw to keep their
-              communities safe and organized.
+              {t("home.footerSection.subtitle")}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
               <Button size="lg" className="text-lg px-8 py-4 shadow-lg">
-                🎯 Add NightClaw Now
+                {t("home.footerSection.ctaPrimary")}
               </Button>
             </div>
 
             <p className="text-sm text-muted-foreground">
-              Free to use • No setup fees • 24/7 Support included
+              {t("home.footerSection.smallLines")}
             </p>
           </div>
         </div>

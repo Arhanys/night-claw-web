@@ -6,12 +6,15 @@ import { Button } from "./ui/button";
 import { SunIcon, MoonIcon, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useFastSearch } from "@/components/wrappers/FastSearch";
+import { useI18n } from "@/locales/client";
+import LanguageSelector from "./LanguageSelector";
 
 // NavBar Component
 export default function NavBar() {
   const { theme, setTheme } = useTheme();
   const { openModal } = useFastSearch();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const t = useI18n();
 
   const themeToggle = () => {
     setTheme(theme === "light" ? "dark" : "light");
@@ -42,23 +45,24 @@ export default function NavBar() {
             className="text-xs justify-start"
             onClick={openModal}
           >
-            Search Documentation...
+            {t("Nav.fastSearch")}
             <kbd className="ml-2 rounded bg-accent/20 px-1.5 py-0.5 font-mono text-xs font-medium">
               Ctrl + K
             </kbd>
           </Button>
           <Link href="/guide" className="link-underline text-text font-medium">
-            Guide
+            {t("Nav.guide")}
           </Link>
           <Link href="/about" className="link-underline text-text font-medium">
-            About
+            {t("Nav.about")}
           </Link>
         </li>
         <li className="flex items-center gap-2">
+          <LanguageSelector />
           <Button onClick={themeToggle} variant="ghost" size="sm">
             {!mounted ? null : theme === "light" ? <MoonIcon /> : <SunIcon />}
           </Button>
-          <Button>Log In</Button>
+          <Button>{t("Nav.logIn")}</Button>
         </li>
       </ul>
 
@@ -100,7 +104,7 @@ export default function NavBar() {
                   closeMobileMenu();
                 }}
               >
-                Search Documentation...
+                {t("Nav.fastSearch")}
                 <kbd className="ml-2 rounded bg-accent/20 px-1.5 py-0.5 font-mono text-xs font-medium">
                   Ctrl + K
                 </kbd>
@@ -113,19 +117,20 @@ export default function NavBar() {
                   className="block text-text font-medium py-2 px-4 rounded-md hover:bg-muted transition-colors"
                   onClick={closeMobileMenu}
                 >
-                  Guide
+                  {t("Nav.guide")}
                 </Link>
                 <Link
                   href="/about"
                   className="block text-text font-medium py-2 px-4 rounded-md hover:bg-muted transition-colors"
                   onClick={closeMobileMenu}
                 >
-                  About
+                  {t("Nav.about")}
                 </Link>
               </div>
 
               {/* Action Buttons */}
               <div className="flex items-center gap-2 pt-4 border-t">
+                <LanguageSelector />
                 <Button
                   onClick={themeToggle}
                   variant="ghost"
@@ -145,7 +150,7 @@ export default function NavBar() {
                   )}
                 </Button>
                 <Button className="flex-1" onClick={closeMobileMenu}>
-                  Log In
+                  {t("Nav.logIn")}
                 </Button>
               </div>
             </div>
