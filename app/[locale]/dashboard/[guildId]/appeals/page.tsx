@@ -1,4 +1,3 @@
-import type { ban_appeals } from "@prisma/client"
 import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
@@ -98,9 +97,10 @@ export default async function AppealsPage({
     prisma.ban_appeals.count({ where }),
   ])
 
+  type Appeal = (typeof appeals)[number]
   const allIds = [
-    ...appeals.map((a: ban_appeals) => a.user_id),
-    ...appeals.filter((a: ban_appeals) => a.reviewed_by).map((a: ban_appeals) => a.reviewed_by!),
+    ...appeals.map((a: Appeal) => a.user_id),
+    ...appeals.filter((a: Appeal) => a.reviewed_by).map((a: Appeal) => a.reviewed_by!),
   ]
   const users = await fetchDiscordUsers(allIds)
 
