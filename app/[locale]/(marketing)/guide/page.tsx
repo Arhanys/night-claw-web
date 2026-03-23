@@ -196,7 +196,6 @@ export default async function Guide() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section */}
       <div className="section-glow-accent">
         <div className="container mx-auto px-6 pt-12 pb-16">
           <h1 className="text-4xl font-bold text-foreground mb-4">
@@ -207,7 +206,6 @@ export default async function Guide() {
       </div>
 
       <div className="container mx-auto px-6 py-8">
-        {/* General Commands Section */}
         <section className="mb-12">
           <div className="flex items-center mb-6">
             <div className="w-1 h-6 bg-accent-secondary rounded-full mr-3"></div>
@@ -222,7 +220,6 @@ export default async function Guide() {
           </ul>
         </section>
 
-        {/* Moderation Commands Section */}
         <section className="mb-12">
           <div className="flex items-center mb-6">
             <div className="w-1 h-6 bg-accent-secondary rounded-full mr-3"></div>
@@ -237,7 +234,6 @@ export default async function Guide() {
           </ul>
         </section>
 
-        {/* Ban Appeal Setup Section */}
         <section className="mb-12">
           <div className="flex items-center mb-6">
             <div className="w-1 h-6 bg-accent-secondary rounded-full mr-3"></div>
@@ -270,7 +266,6 @@ export default async function Guide() {
           </div>
         </section>
 
-        {/* Footer */}
         <div className="mt-12 p-6 bg-muted rounded-lg border border-border">
           <h3 className="text-lg font-semibold text-foreground mb-2">
             {t("guide.help.title")}

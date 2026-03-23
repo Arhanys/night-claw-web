@@ -166,7 +166,6 @@ export default async function Home() {
           </div>
 
           <div className="bg-card rounded-xl max-w-4xl mx-auto overflow-hidden shadow-xl shadow-accent/5">
-            {/* Terminal title bar */}
             <div className="flex items-center gap-2 px-4 py-3 bg-muted/40 border-b border-border/50">
               <span className="w-3 h-3 rounded-full bg-red-500/70"></span>
               <span className="w-3 h-3 rounded-full bg-yellow-500/70"></span>

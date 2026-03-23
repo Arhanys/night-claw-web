@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import NavBar from "@/components/NavBar";
 import { Inter } from "next/font/google";
-import { SearchModal } from "@/components/SearchModal";
 import { Providers } from "./providers";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -22,12 +20,10 @@ export default async function RootLayout({
   const { locale } = await params;
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body className={inter.className + " bg-background text-text"}>
         <Providers locale={locale}>
-          <NavBar />
-          <main className="max-w-7xl mx-auto">{children}</main>
-          <SearchModal />
+          {children}
         </Providers>
       </body>
     </html>

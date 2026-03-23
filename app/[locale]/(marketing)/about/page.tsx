@@ -6,7 +6,6 @@ export default async function About() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section */}
       <div className="section-glow-secondary">
         <div className="container mx-auto px-6 pt-16 pb-20 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
@@ -19,7 +18,6 @@ export default async function About() {
       </div>
 
       <div className="container mx-auto px-6 py-12">
-        {/* Origin Story Section */}
         <section className="mb-16">
           <div className="flex items-center mb-8">
             <div className="w-1 h-8 bg-accent rounded-full mr-4"></div>
@@ -54,7 +52,6 @@ export default async function About() {
           </div>
         </section>
 
-        {/* About Developer Section */}
         <section className="mb-16">
           <div className="flex items-center mb-8">
             <div className="w-1 h-8 bg-accent-secondary rounded-full mr-4"></div>
@@ -95,7 +92,6 @@ export default async function About() {
           </div>
         </section>
 
-        {/* Values & Philosophy Section */}
         <section className="mb-16">
           <div className="bg-linear-to-br from-muted/50 to-muted/20 rounded-lg p-8 border border-border">
             <h3 className="text-2xl font-bold text-foreground mb-6 text-center">
@@ -142,7 +138,6 @@ export default async function About() {
           </div>
         </section>
 
-        {/* Call to Action */}
         <div className="text-center bg-card rounded-lg p-8 border border-border">
           <h3 className="text-2xl font-bold text-foreground mb-4">
             {t("about.footer.title")}

@@ -6,8 +6,10 @@ import { Button } from "./ui/button";
 import { SunIcon, MoonIcon, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useFastSearch } from "@/components/wrappers/FastSearch";
-import { useI18n } from "@/locales/client";
+import { useI18n, useCurrentLocale } from "@/locales/client";
 import LanguageSelector from "./LanguageSelector";
+import { useSession, signIn, signOut } from "next-auth/react";
+import Image from "next/image";
 
 // NavBar Component
 export default function NavBar() {
@@ -15,6 +17,8 @@ export default function NavBar() {
   const { openModal } = useFastSearch();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const t = useI18n();
+  const locale = useCurrentLocale();
+  const { data: session, status } = useSession();
 
   const themeToggle = () => {
     setTheme(theme === "light" ? "dark" : "light");
@@ -28,6 +32,34 @@ export default function NavBar() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const AuthButton = () => {
+    if (status === "loading" || !mounted) return <Button disabled>{t("Nav.logIn")}</Button>;
+    if (session) {
+      return (
+        <div className="flex items-center gap-2">
+          <Link href={`/${locale}/dashboard`}>
+            <Button variant="outline" size="sm">
+              {session.user?.image && (
+                <Image
+                  src={session.user.image}
+                  alt={session.user.name ?? "avatar"}
+                  width={20}
+                  height={20}
+                  className="rounded-full mr-1"
+                />
+              )}
+              Dashboard
+            </Button>
+          </Link>
+          <Button variant="ghost" size="sm" onClick={() => signOut()}>
+            Sign out
+          </Button>
+        </div>
+      );
+    }
+    return <Button onClick={() => signIn("discord")}>{t("Nav.logIn")}</Button>;
+  };
 
   // template
   return (
@@ -62,7 +94,7 @@ export default function NavBar() {
           <Button onClick={themeToggle} variant="ghost" size="sm">
             {!mounted ? null : theme === "light" ? <MoonIcon /> : <SunIcon />}
           </Button>
-          <Button>{t("Nav.logIn")}</Button>
+          <AuthButton />
         </li>
       </ul>
 
@@ -149,9 +181,9 @@ export default function NavBar() {
                     </>
                   )}
                 </Button>
-                <Button className="flex-1" onClick={closeMobileMenu}>
-                  {t("Nav.logIn")}
-                </Button>
+                <div className="flex-1" onClick={closeMobileMenu}>
+                  <AuthButton />
+                </div>
               </div>
             </div>
           </div>
