@@ -260,7 +260,7 @@ const createSearchData = (): SearchResult[] => {
         "story",
         "developer",
         "ahranys",
-        "noah",
+        "noa",
         "background",
       ],
     },

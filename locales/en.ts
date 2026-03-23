@@ -204,7 +204,7 @@ export default {
                     content: "Run /banappeal-panel in the desired channel to post the appeal panel.",
                 },
                 howItWorksTitle: "How it works",
-                howItWorksContent: "A banned user clicks 'Appeal Ban', the bot verifies their ban, and a private appeal-{username} channel is created for staff review. Staff can accept the appeal (user is unbanned and receives the main server invite) or refuse it with a cooldown period (3 days, 1 week, 2 weeks, or 1 month).",
+                howItWorksContent: "A banned user clicks 'Appeal Ban', the bot verifies their ban, and a private appeal channel is created for staff review. Staff can accept the appeal (user is unbanned and receives the main server invite) or refuse it with a cooldown period (3 days, 1 week, 2 weeks, or 1 month).",
             },
             help: {
                 title: "Need More Help?",
@@ -234,7 +234,7 @@ export default {
                 title: "Meet the Developer",
                 cardOne: {
                     title: "👋 Hi, I'm Ahranys",
-                    content: "Also known as Noah, I'm a 21-year-old web developer and Discord moderator. I've been crafting web applications for over 5 years and moderating Discord servers for over 3 years.",
+                    content: "Also known as Noa, I'm a 21-year-old web developer and Discord moderator. I've been crafting web applications for over 5 years and moderating Discord servers for over 3 years.",
                     badgeOne: "5+ Years Development",
                     badgeTwo: "3+ Years Moderation",
                 },

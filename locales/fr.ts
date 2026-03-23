@@ -202,7 +202,7 @@ export default {
                     content: "Exécutez /banappeal-panel dans le channel souhaité pour publier le panel d'appel.",
                 },
                 howItWorksTitle: "Comment ça fonctionne",
-                howItWorksContent: "Un utilisateur banni clique sur 'Faire appel', le bot vérifie son bannissement, et un channel privé appel-{username} est créé pour l'examen par le staff. Le staff peut accepter l'appel (l'utilisateur est débanni et reçoit l'invitation au serveur principal) ou le refuser avec une période de cooldown (3 jours, 1 semaine, 2 semaines ou 1 mois).",
+                howItWorksContent: "Un utilisateur banni clique sur 'Faire appel', le bot vérifie son bannissement, et un channel privé d'appel est créé pour l'examen par le staff. Le staff peut accepter l'appel (l'utilisateur est débanni et reçoit l'invitation au serveur principal) ou le refuser avec une période de cooldown (3 jours, 1 semaine, 2 semaines ou 1 mois).",
             },
             help: {
                 title: "Besoin de plus d'aide ?",
@@ -232,7 +232,7 @@ export default {
                 title: "Rencontrez la Développeuse",
                 cardOne: {
                     title: "👋 Salut, je suis Ahranys",
-                    content: "Aussi connue sous le nom de Noah, je suis une développeuse web de 21 ans et modératrice Discord. Je crée des applications web depuis plus de 5 ans et modère des serveurs Discord depuis plus de 3 ans.",
+                    content: "Aussi connue sous le nom de Noa, je suis une développeuse web de 21 ans et modératrice Discord. Je crée des applications web depuis plus de 5 ans et modère des serveurs Discord depuis plus de 3 ans.",
                     badgeOne: "5+ ans de développement",
                     badgeTwo: "3+ ans de modération",
                 },

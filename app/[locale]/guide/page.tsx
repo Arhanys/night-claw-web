@@ -197,8 +197,8 @@ export default async function Guide() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <div className="bg-linear-to-br from-accent/5 to-accent-secondary/5 border-b border-border">
-        <div className="container mx-auto px-6 py-12">
+      <div className="section-glow-accent">
+        <div className="container mx-auto px-6 pt-12 pb-16">
           <h1 className="text-4xl font-bold text-foreground mb-4">
             {t("guide.title")}
           </h1>

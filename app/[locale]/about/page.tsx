@@ -7,8 +7,8 @@ export default async function About() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <div className="bg-linear-to-br from-accent-secondary/5 to-accent/5 border-b border-border">
-        <div className="container mx-auto px-6 py-16 text-center">
+      <div className="section-glow-secondary">
+        <div className="container mx-auto px-6 pt-16 pb-20 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
             {t("about.title")}
           </h1>
