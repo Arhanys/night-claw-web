@@ -71,7 +71,7 @@ export default {
                     commandSecondColumn: {
                         commandOne: "/setup",
                         commandOneDesc: "Configurer les paramètres du bot",
-                        commandTwo: "/ticketsetup",
+                        commandTwo: "/ticketpanel",
                         commandTwoDesc: "Système de tickets de support",
                         commandThree: "/sanction",
                         commandThreeDesc: "Voir l'historique de l'utilisateur",
@@ -106,13 +106,17 @@ export default {
                     },
                     description: "Configurez votre serveur avec un channel de logs, un rôle de modérateur et un canal de confession pour des performances optimales du bot.",
                 },
-                ticketsetup: {
-                    command: "ticketsetup",
-                    description: "Crée un système de tickets interactif avec des boutons dans le channel actuel, permettant aux membres de créer des tickets de support.",
+                ticketpanel: {
+                    command: "ticketpanel",
+                    description: "Publie un panel de tickets avec un bouton 'Ouvrir un ticket' dans le channel actuel, permettant aux membres de créer des channels de support privés avec l'équipe de modération.",
                 },
-                confesssetup: {
-                    command: "confesssetup",
-                    description: "Configure un système de confession anonyme avec un embed et des boutons dans le channel actuel pour l'engagement de la communauté.",
+                confessionsetup: {
+                    command: "confessionsetup",
+                    description: "Publie un panel de confession avec des boutons Anonyme et Public dans le channel actuel, permettant aux membres d'envoyer des confessions dans le channel configuré.",
+                },
+                banappealPanel: {
+                    command: "banappeal-panel",
+                    description: "Publie un panel d'appel de bannissement avec un bouton 'Faire appel' dans le channel actuel du serveur d'appel, permettant aux utilisateurs bannis de soumettre un appel.",
                 },
             },
             moderationCommands: {
@@ -173,6 +177,32 @@ export default {
                     },
                     description: "Affiche un aperçu complet de toutes les actions de modération prises contre l'utilisateur spécifié avec des informations détaillées.",
                 },
+                slowmode: {
+                    command: "slowmode",
+                    badges: {
+                        badgeOne: "secondes",
+                        badgeTwo: "channel",
+                    },
+                    description: "Définit ou désactive le mode lent dans un channel. Utilisez 0 pour désactiver. Par défaut, s'applique au channel actuel si aucun channel n'est spécifié.",
+                },
+            },
+            banAppealSetup: {
+                title: "Configuration du serveur d'appel de bannissement",
+                intro: "Le système d'appel de bannissement nécessite deux serveurs : votre serveur principal et un serveur d'appel séparé. Suivez les étapes ci-dessous pour configurer les deux.",
+                step1: {
+                    label: "Étape 1 — Sur le serveur principal",
+                    content: "Exécutez /setup appeal_invite:<invitation du serveur d'appel> pour définir le lien envoyé aux utilisateurs bannis, et /setup main_invite:<invitation permanente> pour définir le lien envoyé lorsqu'un appel est accepté.",
+                },
+                step2: {
+                    label: "Étape 2 — Sur le serveur d'appel",
+                    content: "Exécutez /setup source_guild:<ID du serveur principal> pour lier le serveur d'appel à votre serveur principal.",
+                },
+                step3: {
+                    label: "Étape 3 — Sur le serveur d'appel",
+                    content: "Exécutez /banappeal-panel dans le channel souhaité pour publier le panel d'appel.",
+                },
+                howItWorksTitle: "Comment ça fonctionne",
+                howItWorksContent: "Un utilisateur banni clique sur 'Faire appel', le bot vérifie son bannissement, et un channel privé appel-{username} est créé pour l'examen par le staff. Le staff peut accepter l'appel (l'utilisateur est débanni et reçoit l'invitation au serveur principal) ou le refuser avec une période de cooldown (3 jours, 1 semaine, 2 semaines ou 1 mois).",
             },
             help: {
                 title: "Besoin de plus d'aide ?",

@@ -73,7 +73,7 @@ export default {
                     commandSecondColumn: {
                         commandOne: "/setup",
                         commandOneDesc: "Configure bot settings",
-                        commandTwo: "/ticketsetup",
+                        commandTwo: "/ticketpanel",
                         commandTwoDesc: "Support ticket system",
                         commandThree: "/sanction",
                         commandThreeDesc: "View user history",
@@ -108,13 +108,17 @@ export default {
                     },
                     description: "Configure your server with optional logging channel, moderator role, and confession channel for optimal bot performance.",
                 },
-                ticketsetup: {
-                    command: "ticketsetup",
-                    description: "Creates an interactive ticket system embed with buttons in the current channel, allowing members to create support tickets.",
+                ticketpanel: {
+                    command: "ticketpanel",
+                    description: "Posts a support ticket panel with an 'Open Ticket' button in the current channel, allowing members to create private support channels with the moderation team.",
                 },
-                confesssetup: {
-                    command: "confesssetup",
-                    description: "Sets up an anonymous confession system with embed and buttons in the current channel for community engagement.",
+                confessionsetup: {
+                    command: "confessionsetup",
+                    description: "Posts a confession panel with Anonymous and Public buttons in the current channel, allowing members to submit confessions to the configured confession channel.",
+                },
+                banappealPanel: {
+                    command: "banappeal-panel",
+                    description: "Posts a ban appeal panel with an 'Appeal Ban' button in the current channel of the appeal server, allowing banned users to submit a ban appeal.",
                 },
             },
             moderationCommands: {
@@ -175,6 +179,32 @@ export default {
                     },
                     description: "Displays a comprehensive overview of all moderation actions taken against the specified user with detailed information.",
                 },
+                slowmode: {
+                    command: "slowmode",
+                    badges: {
+                        badgeOne: "seconds",
+                        badgeTwo: "channel",
+                    },
+                    description: "Sets or disables slowmode in a channel. Use 0 to disable. Defaults to the current channel if no channel is specified.",
+                },
+            },
+            banAppealSetup: {
+                title: "Ban Appeal Server Setup",
+                intro: "The ban appeal system requires two servers: your main server and a separate appeal server. Follow the steps below to configure both.",
+                step1: {
+                    label: "Step 1 — On the main server",
+                    content: "Run /setup appeal_invite:<appeal server invite> to set the invite link sent to banned users, and /setup main_invite:<permanent invite> to set the link sent when an appeal is accepted.",
+                },
+                step2: {
+                    label: "Step 2 — On the appeal server",
+                    content: "Run /setup source_guild:<main server ID> to link the appeal server to your main server.",
+                },
+                step3: {
+                    label: "Step 3 — On the appeal server",
+                    content: "Run /banappeal-panel in the desired channel to post the appeal panel.",
+                },
+                howItWorksTitle: "How it works",
+                howItWorksContent: "A banned user clicks 'Appeal Ban', the bot verifies their ban, and a private appeal-{username} channel is created for staff review. Staff can accept the appeal (user is unbanned and receives the main server invite) or refuse it with a cooldown period (3 days, 1 week, 2 weeks, or 1 month).",
             },
             help: {
                 title: "Need More Help?",

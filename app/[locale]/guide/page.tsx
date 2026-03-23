@@ -66,12 +66,16 @@ export default async function Guide() {
       description: t("guide.generalCommands.setup.description"),
     },
     {
-      name: t("guide.generalCommands.ticketsetup.command"),
-      description: t("guide.generalCommands.ticketsetup.description"),
+      name: t("guide.generalCommands.ticketpanel.command"),
+      description: t("guide.generalCommands.ticketpanel.description"),
     },
     {
-      name: t("guide.generalCommands.confesssetup.command"),
-      description: t("guide.generalCommands.confesssetup.description"),
+      name: t("guide.generalCommands.confessionsetup.command"),
+      description: t("guide.generalCommands.confessionsetup.description"),
+    },
+    {
+      name: t("guide.generalCommands.banappealPanel.command"),
+      description: t("guide.generalCommands.banappealPanel.description"),
     },
   ];
 
@@ -174,6 +178,20 @@ export default async function Guide() {
       ],
       description: t("guide.moderationCommands.sanction.description"),
     },
+    {
+      name: t("guide.moderationCommands.slowmode.command"),
+      parameters: [
+        {
+          name: t("guide.moderationCommands.slowmode.badges.badgeOne"),
+          type: t("guide.required"),
+        },
+        {
+          name: t("guide.moderationCommands.slowmode.badges.badgeTwo"),
+          type: t("guide.optional"),
+        },
+      ],
+      description: t("guide.moderationCommands.slowmode.description"),
+    },
   ];
 
   return (
@@ -217,6 +235,39 @@ export default async function Guide() {
               <CommandListItem key={index} {...command} />
             ))}
           </ul>
+        </section>
+
+        {/* Ban Appeal Setup Section */}
+        <section className="mb-12">
+          <div className="flex items-center mb-6">
+            <div className="w-1 h-6 bg-accent-secondary rounded-full mr-3"></div>
+            <h2 className="text-2xl font-bold text-foreground">
+              {t("guide.banAppealSetup.title")}
+            </h2>
+          </div>
+          <p className="text-muted-foreground mb-6">
+            {t("guide.banAppealSetup.intro")}
+          </p>
+          <ol className="space-y-4 mb-6">
+            {[
+              { label: t("guide.banAppealSetup.step1.label"), content: t("guide.banAppealSetup.step1.content") },
+              { label: t("guide.banAppealSetup.step2.label"), content: t("guide.banAppealSetup.step2.content") },
+              { label: t("guide.banAppealSetup.step3.label"), content: t("guide.banAppealSetup.step3.content") },
+            ].map((step, index) => (
+              <li key={index} className="border-l-2 border-accent/30 pl-6 py-3 hover:border-accent transition-colors">
+                <p className="text-sm font-semibold text-foreground mb-1">{step.label}</p>
+                <p className="text-muted-foreground text-sm">{step.content}</p>
+              </li>
+            ))}
+          </ol>
+          <div className="p-4 bg-muted rounded-lg border border-border">
+            <p className="text-sm font-semibold text-foreground mb-1">
+              {t("guide.banAppealSetup.howItWorksTitle")}
+            </p>
+            <p className="text-muted-foreground text-sm">
+              {t("guide.banAppealSetup.howItWorksContent")}
+            </p>
+          </div>
         </section>
 
         {/* Footer */}
