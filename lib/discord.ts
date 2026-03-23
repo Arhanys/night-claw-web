@@ -46,7 +46,7 @@ export async function getUserAccessibleGuilds(
   const botGuilds = await prisma.server_settings.findMany({
     where: { guild_id: { in: userGuildIds }, source_guild_id: null },
     select: { guild_id: true, mod_role_id: true },
-  })
+  }) as { guild_id: string; mod_role_id: string | null }[]
   const configMap = new Map(botGuilds.map((g) => [g.guild_id, g.mod_role_id]))
 
   const accessible: string[] = []
