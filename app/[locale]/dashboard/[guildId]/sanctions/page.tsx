@@ -11,6 +11,16 @@ const PAGE_SIZE = 20
 const VALID_ACTIONS = ["ban", "kick", "mute", "warn"] as const
 type ActionType = (typeof VALID_ACTIONS)[number]
 
+interface ModLog {
+  id: number
+  action: string
+  target_id: string
+  moderator_id: string
+  reason: string | null
+  created_at: Date | null
+  guild_id: string | null
+}
+
 const ACTION_STYLE: Record<ActionType, { pill: string; dot: string; label: string }> = {
   ban:  { pill: "bg-red-500/12 text-red-400 ring-1 ring-red-500/20",       dot: "bg-red-400",    label: "Ban" },
   kick: { pill: "bg-orange-500/12 text-orange-400 ring-1 ring-orange-500/20", dot: "bg-orange-400", label: "Kick" },
@@ -88,13 +98,13 @@ export default async function SanctionsPage({
     ...(actionFilter ? { action: actionFilter } : {}),
   }
 
-  const [logs, total] = await Promise.all([
+  const [logs, total]: [ModLog[], number] = await Promise.all([
     prisma.mod_logs.findMany({
       where,
       orderBy: { created_at: "desc" },
       skip: (pageNum - 1) * PAGE_SIZE,
       take: PAGE_SIZE,
-    }),
+    }) as Promise<ModLog[]>,
     prisma.mod_logs.count({ where }),
   ])
 

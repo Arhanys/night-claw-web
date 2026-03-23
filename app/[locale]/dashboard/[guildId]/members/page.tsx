@@ -7,6 +7,21 @@ import Link from "next/link"
 import Image from "next/image"
 import { ArrowLeft, Search, UserX } from "lucide-react"
 
+interface ModLog {
+  id: number
+  action: string
+  target_id: string
+  moderator_id: string
+  reason: string | null
+  created_at: Date | null
+  guild_id: string | null
+}
+
+interface GroupByResult {
+  target_id: string
+  _count: { id: number }
+}
+
 const ACTION_STYLE: Record<string, { pill: string; dot: string; label: string }> = {
   ban:  { pill: "bg-red-500/12 text-red-400 ring-1 ring-red-500/20",        dot: "bg-red-400",    label: "Ban" },
   kick: { pill: "bg-orange-500/12 text-orange-400 ring-1 ring-orange-500/20", dot: "bg-orange-400", label: "Kick" },
@@ -61,12 +76,12 @@ export default async function MembersPage({
   // ── User profile view ──────────────────────────────────────────────────────
   if (searchId?.trim()) {
     const userId = searchId.trim()
-    const [user, sanctions] = await Promise.all([
+    const [user, sanctions]: [Awaited<ReturnType<typeof fetchDiscordUser>>, ModLog[]] = await Promise.all([
       fetchDiscordUser(userId),
       prisma.mod_logs.findMany({
         where: { guild_id: guildId, target_id: userId },
         orderBy: { created_at: "desc" },
-      }),
+      }) as Promise<ModLog[]>,
     ])
 
     const moderatorIds = [...new Set(sanctions.map((s) => s.moderator_id))]
@@ -203,7 +218,7 @@ export default async function MembersPage({
     _count: { id: true },
     orderBy: { _count: { id: "desc" } },
     take: 30,
-  })
+  }) as unknown as GroupByResult[]
 
   const memberIds = recentlySanctioned.map((r) => r.target_id)
   const memberMap = await fetchDiscordUsers(memberIds)
