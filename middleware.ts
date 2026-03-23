@@ -1,22 +1,12 @@
-import { getToken } from "next-auth/jwt"
 import { createI18nMiddleware } from "next-international/middleware"
-import { NextRequest, NextResponse } from "next/server"
+import { NextRequest } from "next/server"
 
 const I18nMiddleware = createI18nMiddleware({
   locales: ["en", "fr"],
   defaultLocale: "en",
 })
 
-export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
-
-  if (/^\/(en|fr)\/dashboard/.test(pathname)) {
-    const token = await getToken({ req: request, secret: process.env.AUTH_SECRET })
-    if (!token) {
-      return NextResponse.redirect(new URL("/api/auth/signin", request.url))
-    }
-  }
-
+export function middleware(request: NextRequest) {
   return I18nMiddleware(request)
 }
 
