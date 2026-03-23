@@ -11,6 +11,18 @@ const PAGE_SIZE = 20
 const VALID_STATUSES = ["open", "accepted", "refused"] as const
 type AppealStatus = (typeof VALID_STATUSES)[number]
 
+interface AppealRecord {
+  id: number
+  user_id: string
+  source_guild_id: string
+  appeal_reason: string
+  ban_reason: string | null
+  status: string | null
+  reviewed_by: string | null
+  decision_reason: string | null
+  created_at: Date | null
+}
+
 const STATUS_STYLE: Record<AppealStatus, { pill: string; dot: string }> = {
   open:     { pill: "bg-yellow-500/12 text-yellow-400 ring-1 ring-yellow-500/20", dot: "bg-yellow-400" },
   accepted: { pill: "bg-green-500/12  text-green-400  ring-1 ring-green-500/20",  dot: "bg-green-400"  },
@@ -87,20 +99,19 @@ export default async function AppealsPage({
     ...(statusFilter ? { status: statusFilter } : {}),
   }
 
-  const [appeals, total] = await Promise.all([
+  const [appeals, total]: [AppealRecord[], number] = await Promise.all([
     prisma.ban_appeals.findMany({
       where,
       orderBy: { created_at: "desc" },
       skip: (pageNum - 1) * PAGE_SIZE,
       take: PAGE_SIZE,
-    }),
+    }) as Promise<AppealRecord[]>,
     prisma.ban_appeals.count({ where }),
   ])
 
-  type Appeal = (typeof appeals)[number]
   const allIds = [
-    ...appeals.map((a: Appeal) => a.user_id),
-    ...appeals.filter((a: Appeal) => a.reviewed_by).map((a: Appeal) => a.reviewed_by!),
+    ...appeals.map((a) => a.user_id),
+    ...appeals.filter((a) => a.reviewed_by).map((a) => a.reviewed_by!),
   ]
   const users = await fetchDiscordUsers(allIds)
 
