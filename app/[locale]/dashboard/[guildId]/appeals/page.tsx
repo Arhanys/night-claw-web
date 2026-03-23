@@ -126,7 +126,7 @@ export default async function AppealsPage({
   }
 
   return (
-    <div className="p-8 max-w-6xl">
+    <div className="p-4 sm:p-6 md:p-8 max-w-6xl">
       {/* Back */}
       <Link
         href={`/${locale}/dashboard/${guildId}`}
@@ -153,7 +153,7 @@ export default async function AppealsPage({
             className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
               !statusFilter
                 ? "bg-accent text-white"
-                : "bg-card border border-border/50 text-text/60 hover:text-text"
+                : "bg-white/5 text-text/60 hover:text-text"
             }`}
           >
             {t("appeals.all")}
@@ -167,7 +167,7 @@ export default async function AppealsPage({
                 className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
                   statusFilter === s
                     ? "bg-accent text-white"
-                    : "bg-card border border-border/50 text-text/60 hover:text-text"
+                    : "bg-white/5 text-text/60 hover:text-text"
                 }`}
               >
                 {t(`appeals.statuses.${s}` as any)}
@@ -177,8 +177,72 @@ export default async function AppealsPage({
         </div>
       </div>
 
-      {/* Table */}
-      <div className="rounded-2xl border border-border/50 bg-card overflow-hidden">
+      {/* Mobile cards */}
+      <div className="md:hidden space-y-2">
+        {appeals.length === 0 ? (
+          <div className="py-20 text-center text-text/40 text-sm rounded-2xl bg-card">
+            {t("appeals.noResults")}
+          </div>
+        ) : appeals.map((appeal) => {
+          const style = STATUS_STYLE[appeal.status as AppealStatus]
+          const appellant = users.get(appeal.user_id) ?? null
+          const reviewer = appeal.reviewed_by ? users.get(appeal.reviewed_by) ?? null : null
+          const appellantName = appellant?.globalName ?? appellant?.username ?? appeal.user_id
+          const appellantAvatar = appellant?.avatar
+            ? `https://cdn.discordapp.com/avatars/${appeal.user_id}/${appellant.avatar}.webp?size=32`
+            : null
+          return (
+            <div key={appeal.id} className="rounded-xl bg-card ring-1 ring-white/[0.07] p-4 space-y-3">
+              {/* Status + date */}
+              <div className="flex items-center justify-between gap-2">
+                <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${style?.pill ?? "bg-white/10 text-text/60"}`}>
+                  {style && <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${style.dot}`} />}
+                  {t(`appeals.statuses.${appeal.status as AppealStatus}` as any)}
+                </span>
+                <span className="text-xs text-text/40 shrink-0">
+                  {appeal.created_at?.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) ?? "—"}
+                </span>
+              </div>
+
+              {/* Appellant */}
+              <div className="flex items-center gap-2.5">
+                {appellantAvatar ? (
+                  <Image src={appellantAvatar} alt={appellantName} width={28} height={28} className="rounded-full shrink-0" />
+                ) : (
+                  <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-[11px] font-bold text-text/60 shrink-0">
+                    {appellantName[0]?.toUpperCase()}
+                  </div>
+                )}
+                <div className="min-w-0">
+                  <p className="text-sm font-medium truncate">{appellantName}</p>
+                  {appellant?.username && appellant.globalName && (
+                    <p className="text-[11px] text-text/35 font-mono truncate">@{appellant.username}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Appeal reason */}
+              {appeal.appeal_reason && (
+                <div className="pt-2">
+                  <p className="text-[10px] text-text/35 uppercase tracking-wide font-semibold mb-1">{t("appeals.appealReason")}</p>
+                  <p className="text-xs text-text/70 line-clamp-3">{appeal.appeal_reason}</p>
+                </div>
+              )}
+
+              {/* Reviewed by */}
+              {reviewer && (
+                <div className="flex items-center gap-1.5 text-xs text-text/40">
+                  <span>{t("appeals.reviewedBy")}:</span>
+                  <span className="font-medium text-text/60">{reviewer.globalName ?? reviewer.username}</span>
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+
+      {/* Desktop table */}
+      <div className="hidden md:block rounded-2xl bg-card overflow-hidden">
         {appeals.length === 0 ? (
           <div className="py-20 text-center text-text/40 text-sm">
             {t("appeals.noResults")}
@@ -187,7 +251,7 @@ export default async function AppealsPage({
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-border/50">
+                <tr className="border-b border-white/[0.07]">
                   <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{t("appeals.status")}</th>
                   <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{t("appeals.appellant")}</th>
                   <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{t("appeals.appealReason")}</th>
@@ -196,14 +260,13 @@ export default async function AppealsPage({
                   <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{t("appeals.date")}</th>
                 </tr>
               </thead>
-              <tbody>
-                {appeals.map((appeal, i) => {
+              <tbody className="divide-y divide-white/[0.07]">
+                {appeals.map((appeal) => {
                   const style = STATUS_STYLE[appeal.status as AppealStatus]
-                  const isLast = i === appeals.length - 1
                   return (
                     <tr
                       key={appeal.id}
-                      className={`hover:bg-white/[0.025] transition-colors ${!isLast ? "border-b border-border/30" : ""}`}
+                      className="hover:bg-white/[0.025] transition-colors"
                     >
                       <td className="px-5 py-4 w-32">
                         <span

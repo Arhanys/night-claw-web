@@ -122,7 +122,7 @@ export default async function SanctionsPage({
   }
 
   return (
-    <div className="p-8 max-w-6xl">
+    <div className="p-4 sm:p-6 md:p-8 max-w-6xl">
       {/* Back */}
       <Link
         href={`/${locale}/dashboard/${guildId}`}
@@ -149,7 +149,7 @@ export default async function SanctionsPage({
             className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
               !actionFilter
                 ? "bg-accent text-white"
-                : "bg-card border border-border/50 text-text/60 hover:text-text"
+                : "bg-white/5 text-text/60 hover:text-text"
             }`}
           >
             {t("sanctions.all")}
@@ -163,7 +163,7 @@ export default async function SanctionsPage({
                 className={`px-3 py-1 rounded-full text-xs font-semibold capitalize transition-colors ${
                   actionFilter === a
                     ? "bg-accent text-white"
-                    : "bg-card border border-border/50 text-text/60 hover:text-text"
+                    : "bg-white/5 text-text/60 hover:text-text"
                 }`}
               >
                 {s.label}
@@ -173,8 +173,79 @@ export default async function SanctionsPage({
         </div>
       </div>
 
-      {/* Table */}
-      <div className="rounded-2xl border border-border/50 bg-card overflow-hidden">
+      {/* Mobile cards */}
+      <div className="md:hidden space-y-2">
+        {logs.length === 0 ? (
+          <div className="py-20 text-center text-text/40 text-sm rounded-2xl bg-card">
+            {t("sanctions.noResults")}
+          </div>
+        ) : logs.map((log) => {
+          const style = ACTION_STYLE[log.action as ActionType]
+          const target = users.get(log.target_id) ?? null
+          const mod = users.get(log.moderator_id) ?? null
+          const targetName = target?.globalName ?? target?.username ?? log.target_id
+          const modName = mod?.globalName ?? mod?.username ?? log.moderator_id
+          const targetAvatar = target?.avatar
+            ? `https://cdn.discordapp.com/avatars/${log.target_id}/${target.avatar}.webp?size=32`
+            : null
+          const modAvatar = mod?.avatar
+            ? `https://cdn.discordapp.com/avatars/${log.moderator_id}/${mod.avatar}.webp?size=32`
+            : null
+          return (
+            <div key={log.id} className="rounded-xl bg-card ring-1 ring-white/[0.07] p-4 space-y-3">
+              {/* Top row: pill + date */}
+              <div className="flex items-center justify-between gap-2">
+                <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${style?.pill ?? "bg-white/10 text-text/60"}`}>
+                  {style && <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${style.dot}`} />}
+                  {style?.label ?? log.action}
+                </span>
+                <span className="text-xs text-text/40 shrink-0">
+                  {log.created_at?.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) ?? "—"}
+                </span>
+              </div>
+
+              {/* Target */}
+              <div className="flex items-center gap-2.5">
+                {targetAvatar ? (
+                  <Image src={targetAvatar} alt={targetName} width={28} height={28} className="rounded-full shrink-0" />
+                ) : (
+                  <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-[11px] font-bold text-text/60 shrink-0">
+                    {targetName[0]?.toUpperCase()}
+                  </div>
+                )}
+                <div className="min-w-0">
+                  <p className="text-sm font-medium truncate">{targetName}</p>
+                  {target?.username && target.globalName && (
+                    <p className="text-[11px] text-text/35 font-mono truncate">@{target.username}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Moderator */}
+              <div className="flex items-center gap-2 text-text/50">
+                {modAvatar ? (
+                  <Image src={modAvatar} alt={modName} width={20} height={20} className="rounded-full shrink-0" />
+                ) : (
+                  <div className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-bold shrink-0">
+                    {modName[0]?.toUpperCase()}
+                  </div>
+                )}
+                <span className="text-xs truncate">{t("sanctions.moderator")}: {modName}</span>
+              </div>
+
+              {/* Reason */}
+              {log.reason ? (
+                <p className="text-xs text-text/60 line-clamp-2 pt-2">{log.reason}</p>
+              ) : (
+                <p className="text-xs text-text/25 italic pt-2">{t("sanctions.noReason")}</p>
+              )}
+            </div>
+          )
+        })}
+      </div>
+
+      {/* Desktop table */}
+      <div className="hidden md:block rounded-2xl bg-card overflow-hidden">
         {logs.length === 0 ? (
           <div className="py-20 text-center text-text/40 text-sm">
             {t("sanctions.noResults")}
@@ -183,7 +254,7 @@ export default async function SanctionsPage({
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-border/50">
+                <tr className="border-b border-white/[0.07]">
                   <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{t("sanctions.action")}</th>
                   <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{t("sanctions.target")}</th>
                   <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{t("sanctions.moderator")}</th>
@@ -191,54 +262,36 @@ export default async function SanctionsPage({
                   <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{t("sanctions.reason")}</th>
                 </tr>
               </thead>
-              <tbody>
-                {logs.map((log, i) => {
+              <tbody className="divide-y divide-white/[0.07]">
+                {logs.map((log) => {
                   const style = ACTION_STYLE[log.action as ActionType]
-                  const isLast = i === logs.length - 1
                   return (
                     <tr
                       key={log.id}
-                      className={`hover:bg-white/[0.025] transition-colors ${!isLast ? "border-b border-border/30" : ""}`}
+                      className="hover:bg-white/[0.025] transition-colors"
                     >
                       <td className="px-5 py-4 w-28">
-                        <span
-                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${
-                            style?.pill ?? "bg-white/10 text-text/60"
-                          }`}
-                        >
-                          {style && (
-                            <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${style.dot}`} />
-                          )}
+                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${style?.pill ?? "bg-white/10 text-text/60"}`}>
+                          {style && <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${style.dot}`} />}
                           {style?.label ?? log.action}
                         </span>
                       </td>
-
                       <td className="px-5 py-4 w-52">
                         <UserCell userId={log.target_id} user={users.get(log.target_id) ?? null} discordIdLabel={t("sanctions.discordId")} />
                       </td>
-
                       <td className="px-5 py-4 w-52">
                         <UserCell userId={log.moderator_id} user={users.get(log.moderator_id) ?? null} discordIdLabel={t("sanctions.discordId")} />
                       </td>
-
                       <td className="px-5 py-4 whitespace-nowrap">
                         <div className="text-sm text-text/70">
-                          {log.created_at?.toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          }) ?? "—"}
+                          {log.created_at?.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) ?? "—"}
                         </div>
                         {log.created_at && (
                           <div className="text-[11px] text-text/35 mt-0.5">
-                            {log.created_at.toLocaleTimeString("en-US", {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
+                            {log.created_at.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
                           </div>
                         )}
                       </td>
-
                       <td className="px-5 py-4 max-w-xs">
                         {log.reason ? (
                           <span className="text-sm text-text/70 line-clamp-2">{log.reason}</span>

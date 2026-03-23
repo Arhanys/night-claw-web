@@ -26,7 +26,7 @@ export default async function DashboardPage({
   ).filter((g): g is NonNullable<typeof g> => g !== null)
 
   return (
-    <div className="p-8 max-w-4xl">
+    <div className="p-4 sm:p-6 md:p-8 max-w-4xl">
       <div className="mb-8">
         <h1 className="text-2xl font-bold mb-1">{t("selectServer.title")}</h1>
         <p className="text-sm text-text/50">
@@ -47,7 +47,7 @@ export default async function DashboardPage({
             <Link
               key={guild.id}
               href={`/${locale}/dashboard/${guild.id}`}
-              className="group flex items-center gap-4 p-4 rounded-xl border border-border/50 bg-card hover:border-accent/40 hover:bg-accent/5 transition-all"
+              className="group flex items-center gap-4 p-4 rounded-xl bg-card hover:bg-accent/5 transition-all"
             >
               {guild.icon ? (
                 <Image

@@ -90,7 +90,7 @@ export default async function MembersPage({
     const displayName = user?.globalName ?? user?.username ?? null
 
     return (
-      <div className="p-8 max-w-4xl">
+      <div className="p-4 sm:p-6 md:p-8 max-w-4xl">
         {/* Back */}
         <Link
           href={`/${locale}/dashboard/${guildId}/members`}
@@ -101,7 +101,7 @@ export default async function MembersPage({
         </Link>
 
         {/* Profile card */}
-        <div className="flex items-center gap-4 p-5 rounded-2xl border border-border/50 bg-card mb-6">
+        <div className="flex items-center gap-4 p-5 rounded-2xl bg-card mb-6">
           {user ? (
             <>
               <UserAvatar userId={userId} user={user} size={40} />
@@ -137,12 +137,12 @@ export default async function MembersPage({
 
         {/* Sanctions table */}
         {sanctions.length === 0 ? (
-          <div className="rounded-2xl border border-border/50 bg-card py-16 text-center text-text/40 text-sm">
+          <div className="rounded-2xl bg-card py-16 text-center text-text/40 text-sm">
             {t("members.noSanctions")}
           </div>
         ) : (
-          <div className="rounded-2xl border border-border/50 bg-card overflow-hidden">
-            <div className="px-5 py-3.5 border-b border-border/50">
+          <div className="rounded-2xl bg-card overflow-hidden">
+            <div className="px-5 py-3.5">
               <h2 className="text-sm font-semibold text-text/50 uppercase tracking-wide">
                 {t("members.allSanctions")}
               </h2>
@@ -150,23 +150,22 @@ export default async function MembersPage({
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-border/50">
+                  <tr className="border-b border-white/[0.07]">
                     <th className="px-5 py-3 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{t("sanctions.action")}</th>
                     <th className="px-5 py-3 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{t("sanctions.moderator")}</th>
                     <th className="px-5 py-3 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{t("sanctions.date")}</th>
                     <th className="px-5 py-3 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{t("sanctions.reason")}</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {sanctions.map((s, i) => {
+                <tbody className="divide-y divide-white/[0.07]">
+                  {sanctions.map((s) => {
                     const style = ACTION_STYLE[s.action]
                     const mod = moderators.get(s.moderator_id) ?? null
                     const modName = mod?.globalName ?? mod?.username ?? null
-                    const isLast = i === sanctions.length - 1
                     return (
                       <tr
                         key={s.id}
-                        className={`hover:bg-white/[0.025] transition-colors ${!isLast ? "border-b border-border/30" : ""}`}
+                        className="hover:bg-white/[0.025] transition-colors"
                       >
                         <td className="px-5 py-3.5 w-28">
                           <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${style?.pill ?? "bg-white/10 text-text/60"}`}>
@@ -224,7 +223,7 @@ export default async function MembersPage({
   const memberMap = await fetchDiscordUsers(memberIds)
 
   return (
-    <div className="p-8 max-w-3xl">
+    <div className="p-4 sm:p-6 md:p-8 max-w-3xl">
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold mb-1">{t("members.title")}</h1>
@@ -256,17 +255,16 @@ export default async function MembersPage({
           <h2 className="text-xs font-semibold text-text/40 uppercase tracking-wide mb-3">
             {t("members.recentlySanctioned")}
           </h2>
-          <div className="rounded-2xl border border-border/50 bg-card overflow-hidden">
-            {recentlySanctioned.map((entry, i) => {
+          <div className="rounded-2xl bg-card overflow-hidden divide-y divide-white/[0.07]">
+            {recentlySanctioned.map((entry) => {
               const user = memberMap.get(entry.target_id) ?? null
               const displayName = user?.globalName ?? user?.username ?? null
               const count = entry._count.id
-              const isLast = i === recentlySanctioned.length - 1
               return (
                 <Link
                   key={entry.target_id}
                   href={`/${locale}/dashboard/${guildId}/members?id=${entry.target_id}`}
-                  className={`flex items-center gap-3 px-4 py-3 hover:bg-white/[0.025] transition-colors ${!isLast ? "border-b border-border/30" : ""}`}
+                  className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.025] transition-colors"
                 >
                   <UserAvatar userId={entry.target_id} user={user} size={32} />
                   <div className="min-w-0 flex-1">

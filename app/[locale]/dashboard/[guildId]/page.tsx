@@ -35,9 +35,9 @@ export default async function GuildOverviewPage({
     : []
 
   return (
-    <div className="p-8 max-w-4xl">
+    <div className="p-4 sm:p-6 md:p-8 max-w-4xl">
       {/* Guild header */}
-      <div className="flex items-center gap-5 mb-8 pb-8 border-b border-border/50">
+      <div className="flex items-center gap-5 mb-8 pb-8">
         {guild.icon ? (
           <Image
             src={iconUrl(guild.id, guild.icon)}
@@ -67,7 +67,7 @@ export default async function GuildOverviewPage({
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-        <div className="p-5 rounded-xl border border-border/50 bg-card">
+        <div className="p-5 rounded-xl bg-card">
           <div className="flex items-center gap-2 text-text/50 mb-3">
             <Users className="h-4 w-4" />
             <span className="text-xs font-medium uppercase tracking-wide">{t("overview.members")}</span>
@@ -80,7 +80,7 @@ export default async function GuildOverviewPage({
           </p>
         </div>
 
-        <div className="p-5 rounded-xl border border-border/50 bg-card">
+        <div className="p-5 rounded-xl bg-card">
           <div className="flex items-center gap-2 text-text/50 mb-3">
             <Wifi className="h-4 w-4" />
             <span className="text-xs font-medium uppercase tracking-wide">{t("overview.botStatus")}</span>
@@ -92,7 +92,7 @@ export default async function GuildOverviewPage({
           <p className="text-sm text-text/40 mt-1">{t("overview.botActive")}</p>
         </div>
 
-        <div className="p-5 rounded-xl border border-border/50 bg-card">
+        <div className="p-5 rounded-xl bg-card">
           <div className="flex items-center gap-2 text-text/50 mb-3">
             <Shield className="h-4 w-4" />
             <span className="text-xs font-medium uppercase tracking-wide">{t("overview.yourRole")}</span>
@@ -111,7 +111,7 @@ export default async function GuildOverviewPage({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
         <Link
           href={`/${locale}/dashboard/${guildId}/sanctions`}
-          className="group flex items-center gap-4 p-4 rounded-xl border border-border/50 bg-card hover:border-accent/40 hover:bg-accent/5 transition-all"
+          className="group flex items-center gap-4 p-4 rounded-xl bg-card hover:bg-accent/5 transition-all"
         >
           <div className="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center shrink-0">
             <Shield className="h-5 w-5 text-red-400" />
@@ -124,7 +124,7 @@ export default async function GuildOverviewPage({
 
         <Link
           href={`/${locale}/dashboard/${guildId}/config`}
-          className="group flex items-center gap-4 p-4 rounded-xl border border-border/50 bg-card hover:border-accent/40 hover:bg-accent/5 transition-all"
+          className="group flex items-center gap-4 p-4 rounded-xl bg-card hover:bg-accent/5 transition-all"
         >
           <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center shrink-0">
             <Settings className="h-5 w-5 text-accent" />
@@ -154,7 +154,7 @@ export default async function GuildOverviewPage({
             return (
               <div
                 key={mod.userId}
-                className="flex items-center gap-3 p-3 rounded-xl border border-border/50 bg-card"
+                className="flex items-center gap-3 p-3 rounded-xl bg-card"
               >
                 {avatarUrl ? (
                   <Image

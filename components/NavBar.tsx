@@ -63,7 +63,7 @@ export default function NavBar() {
 
   // template
   return (
-    <nav className="flex items-center h-16 border-b border-border/50 px-4 mb-6 sticky top-0 z-10 bg-background/80 backdrop-blur-md">
+    <nav className="flex items-center h-16 px-4 mb-6 sticky top-0 z-10 bg-background/80 backdrop-blur-md">
       <Link href="/" onClick={closeMobileMenu}>
         <h1 className="text-xl font-bold">Night<span className="text-accent">Claw</span></h1>
       </Link>
@@ -124,7 +124,7 @@ export default function NavBar() {
           />
 
           {/* Mobile Menu */}
-          <div className="fixed top-16 right-0 left-0 bg-background/90 backdrop-blur-md border-b border-border/50 shadow-lg z-50 lg:hidden">
+          <div className="fixed top-16 right-0 left-0 bg-background/90 backdrop-blur-md shadow-lg z-50 lg:hidden">
             <div className="px-4 py-6 space-y-4">
               {/* Search Button - Mobile */}
               <Button
@@ -161,7 +161,7 @@ export default function NavBar() {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex items-center gap-2 pt-4 border-t">
+              <div className="flex items-center gap-2 pt-4">
                 <LanguageSelector />
                 <Button
                   onClick={themeToggle}

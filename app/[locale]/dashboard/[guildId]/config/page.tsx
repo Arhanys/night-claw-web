@@ -53,7 +53,7 @@ export default async function ConfigPage({
   }
 
   return (
-    <div className="p-8 max-w-2xl">
+    <div className="p-4 sm:p-6 md:p-8 max-w-2xl">
       {/* Back */}
       <Link
         href={`/${locale}/dashboard/${guildId}`}
@@ -78,7 +78,7 @@ export default async function ConfigPage({
 
       <form action={isAdmin ? saveConfig : undefined} className="space-y-5">
         {CONFIG_FIELD_NAMES.map((name) => (
-          <div key={name} className="rounded-xl border border-border/50 bg-card p-4">
+          <div key={name} className="rounded-xl bg-card p-4">
             <label htmlFor={name} className="block text-sm font-semibold mb-0.5">
               {t(`config.fields.${name}.label` as any)}
             </label>
