@@ -3,7 +3,7 @@
 import { useState, useTransition, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { X, Trash2, ChevronLeft, ChevronRight } from "lucide-react"
+import { X, Trash2, Pencil, ChevronLeft, ChevronRight } from "lucide-react"
 import { updateReason, deleteSanction } from "./actions"
 
 type ActionType = "ban" | "kick" | "mute" | "warn"
@@ -33,7 +33,7 @@ export interface ResolvedLog {
   mod: UserInfo | null
 }
 
-interface SanctionsStrings {
+export interface SanctionsStrings {
   action: string
   target: string
   moderator: string
@@ -48,8 +48,10 @@ interface SanctionsStrings {
   of: string
   total: string
   details: string
+  edit: string
   editReason: string
   saveReason: string
+  cancel: string
   deleteTitle: string
   deleteConfirm: string
   saved: string
@@ -87,6 +89,167 @@ function UserRow({ userId, user, label, discordIdLabel }: { userId: string; user
   )
 }
 
+export function SanctionModal({
+  selected,
+  isAdmin,
+  guildId,
+  strings,
+  onClose,
+  onSaved,
+  onDeleted,
+}: {
+  selected: ResolvedLog
+  isAdmin: boolean
+  guildId: string
+  strings: SanctionsStrings
+  onClose: () => void
+  onSaved: (id: number, reason: string | null) => void
+  onDeleted: (id: number) => void
+}) {
+  const [isEditing, setIsEditing] = useState(false)
+  const [editReason, setEditReason] = useState(selected.reason ?? "")
+  const [savedMsg, setSavedMsg] = useState(false)
+  const [saving, startSave] = useTransition()
+  const [deleting, startDelete] = useTransition()
+
+  useEffect(() => {
+    setIsEditing(false)
+    setEditReason(selected.reason ?? "")
+    setSavedMsg(false)
+  }, [selected.id, selected.reason])
+
+  function handleSave() {
+    startSave(async () => {
+      await updateReason(selected.id, editReason, guildId)
+      const newReason = editReason.trim() || null
+      onSaved(selected.id, newReason)
+      setIsEditing(false)
+      setSavedMsg(true)
+    })
+  }
+
+  function handleDelete() {
+    if (!window.confirm(strings.deleteConfirm)) return
+    startDelete(async () => {
+      await deleteSanction(selected.id, guildId)
+      onDeleted(selected.id)
+      onClose()
+    })
+  }
+
+  function handleCancel() {
+    setEditReason(selected.reason ?? "")
+    setIsEditing(false)
+  }
+
+  const style = ACTION_STYLE[selected.action as ActionType]
+
+  return (
+    <div
+      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div
+        className="bg-card border border-white/[0.08] rounded-2xl w-full max-w-lg shadow-2xl flex flex-col max-h-[90vh]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-white/[0.07] shrink-0">
+          <div className="flex items-center gap-2.5">
+            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${style?.pill ?? "bg-white/10 text-text/60"}`}>
+              {style && <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${style.dot}`} />}
+              {style?.label ?? selected.action}
+            </span>
+            {selected.created_at && (
+              <span className="text-sm text-text/40">
+                {new Date(selected.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                {" · "}
+                {new Date(selected.created_at).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
+              </span>
+            )}
+          </div>
+          <button
+            onClick={onClose}
+            className="text-text/40 hover:text-text/80 transition-colors p-1 rounded-lg hover:bg-white/5"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="px-5 py-5 space-y-5 overflow-y-auto">
+          <div className="grid grid-cols-2 gap-5">
+            <UserRow userId={selected.target_id} user={selected.target} label={strings.target} discordIdLabel={strings.discordId} />
+            <UserRow userId={selected.moderator_id} user={selected.mod} label={strings.moderator} discordIdLabel={strings.discordId} />
+          </div>
+
+          <div className="border-t border-white/[0.07]" />
+
+          <div>
+            <p className="text-[11px] text-text/35 uppercase tracking-wide font-semibold mb-2">{strings.editReason}</p>
+            <textarea
+              value={editReason}
+              onChange={(e) => { setEditReason(e.target.value); setSavedMsg(false) }}
+              readOnly={!isEditing}
+              rows={4}
+              placeholder={strings.noReason}
+              className={`w-full rounded-xl border px-3.5 py-2.5 text-sm resize-none transition-colors ${
+                isEditing
+                  ? "bg-white/[0.04] border-white/[0.08] text-text/80 placeholder:text-text/25 focus:outline-none focus:ring-1 focus:ring-accent/50"
+                  : "bg-transparent border-transparent text-text/70 cursor-default focus:outline-none"
+              }`}
+            />
+          </div>
+
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              {!isEditing ? (
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/5 text-text/70 text-sm font-medium hover:bg-white/10 transition-colors"
+                >
+                  <Pencil className="h-3.5 w-3.5" />
+                  {strings.edit}
+                </button>
+              ) : (
+                <>
+                  <button
+                    onClick={handleSave}
+                    disabled={saving}
+                    className="px-4 py-2 rounded-xl bg-accent text-white text-sm font-medium hover:bg-accent/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {saving ? "..." : strings.saveReason}
+                  </button>
+                  <button
+                    onClick={handleCancel}
+                    className="text-sm text-text/40 hover:text-text/70 transition-colors px-2 py-2"
+                  >
+                    {strings.cancel}
+                  </button>
+                </>
+              )}
+              {savedMsg && (
+                <span className="text-xs text-green-400">{strings.saved}</span>
+              )}
+            </div>
+
+            {isAdmin && (
+              <button
+                onClick={handleDelete}
+                disabled={deleting}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-500/10 text-red-400 text-sm font-medium hover:bg-red-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+                {deleting ? "..." : strings.deleteTitle}
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function SanctionsList({
   initialLogs,
   isAdmin,
@@ -110,142 +273,29 @@ export function SanctionsList({
 }) {
   const [logs, setLogs] = useState(initialLogs)
   const [selected, setSelected] = useState<ResolvedLog | null>(null)
-  const [editReason, setEditReason] = useState("")
-  const [savedMsg, setSavedMsg] = useState(false)
-  const [saving, startSave] = useTransition()
-  const [deleting, startDelete] = useTransition()
 
   useEffect(() => {
     setLogs(initialLogs)
   }, [initialLogs])
 
-  function open(log: ResolvedLog) {
-    setSelected(log)
-    setEditReason(log.reason ?? "")
-    setSavedMsg(false)
-  }
-
-  function close() {
-    setSelected(null)
-  }
-
-  function handleReasonChange(v: string) {
-    setEditReason(v)
-    setSavedMsg(false)
-  }
-
-  function handleSave() {
-    if (!selected) return
-    startSave(async () => {
-      await updateReason(selected.id, editReason, guildId)
-      const newReason = editReason.trim() || null
-      setLogs((prev) => prev.map((l) => (l.id === selected.id ? { ...l, reason: newReason } : l)))
-      setSelected((prev) => (prev ? { ...prev, reason: newReason } : null))
-      setSavedMsg(true)
-    })
-  }
-
-  function handleDelete() {
-    if (!selected || !window.confirm(strings.deleteConfirm)) return
-    startDelete(async () => {
-      await deleteSanction(selected.id, guildId)
-      setLogs((prev) => prev.filter((l) => l.id !== selected.id))
-      setSelected(null)
-    })
-  }
-
   return (
     <>
-      {/* Detail modal */}
       {selected && (
-        <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          onClick={close}
-        >
-          <div
-            className="bg-card border border-white/[0.08] rounded-2xl w-full max-w-lg shadow-2xl flex flex-col max-h-[90vh]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Header */}
-            <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-white/[0.07] shrink-0">
-              <div className="flex items-center gap-2.5">
-                {(() => {
-                  const style = ACTION_STYLE[selected.action as ActionType]
-                  return (
-                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${style?.pill ?? "bg-white/10 text-text/60"}`}>
-                      {style && <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${style.dot}`} />}
-                      {style?.label ?? selected.action}
-                    </span>
-                  )
-                })()}
-                {selected.created_at && (
-                  <span className="text-sm text-text/40">
-                    {new Date(selected.created_at).toLocaleDateString("en-US", {
-                      month: "short", day: "numeric", year: "numeric",
-                    })}
-                    {" · "}
-                    {new Date(selected.created_at).toLocaleTimeString("en-US", {
-                      hour: "2-digit", minute: "2-digit",
-                    })}
-                  </span>
-                )}
-              </div>
-              <button
-                onClick={close}
-                className="text-text/40 hover:text-text/80 transition-colors p-1 rounded-lg hover:bg-white/5"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-
-            {/* Body */}
-            <div className="px-5 py-5 space-y-5 overflow-y-auto">
-              <div className="grid grid-cols-2 gap-5">
-                <UserRow userId={selected.target_id} user={selected.target} label={strings.target} discordIdLabel={strings.discordId} />
-                <UserRow userId={selected.moderator_id} user={selected.mod} label={strings.moderator} discordIdLabel={strings.discordId} />
-              </div>
-
-              <div className="border-t border-white/[0.07]" />
-
-              <div>
-                <p className="text-[11px] text-text/35 uppercase tracking-wide font-semibold mb-2">{strings.editReason}</p>
-                <textarea
-                  value={editReason}
-                  onChange={(e) => handleReasonChange(e.target.value)}
-                  rows={4}
-                  placeholder={strings.noReason}
-                  className="w-full rounded-xl bg-white/[0.04] border border-white/[0.08] px-3.5 py-2.5 text-sm text-text/80 placeholder:text-text/25 focus:outline-none focus:ring-1 focus:ring-accent/50 resize-none"
-                />
-              </div>
-
-              <div className="flex items-center justify-between gap-3 pt-1">
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={handleSave}
-                    disabled={saving}
-                    className="px-4 py-2 rounded-xl bg-accent text-white text-sm font-medium hover:bg-accent/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {saving ? "..." : strings.saveReason}
-                  </button>
-                  {savedMsg && (
-                    <span className="text-xs text-green-400">{strings.saved}</span>
-                  )}
-                </div>
-
-                {isAdmin && (
-                  <button
-                    onClick={handleDelete}
-                    disabled={deleting}
-                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-red-500/10 text-red-400 text-sm font-medium hover:bg-red-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <Trash2 className="h-3.5 w-3.5" />
-                    {deleting ? "..." : strings.deleteTitle}
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
+        <SanctionModal
+          selected={selected}
+          isAdmin={isAdmin}
+          guildId={guildId}
+          strings={strings}
+          onClose={() => setSelected(null)}
+          onSaved={(id, reason) => {
+            setLogs((prev) => prev.map((l) => (l.id === id ? { ...l, reason } : l)))
+            setSelected((prev) => (prev ? { ...prev, reason } : null))
+          }}
+          onDeleted={(id) => {
+            setLogs((prev) => prev.filter((l) => l.id !== id))
+            setSelected(null)
+          }}
+        />
       )}
 
       {/* Mobile cards */}
@@ -263,7 +313,7 @@ export function SanctionsList({
           return (
             <button
               key={log.id}
-              onClick={() => open(log)}
+              onClick={() => setSelected(log)}
               className="w-full text-left rounded-xl bg-card ring-1 ring-white/[0.07] p-4 space-y-3 hover:bg-white/[0.03] transition-colors"
             >
               <div className="flex items-center justify-between gap-2">
@@ -343,7 +393,7 @@ export function SanctionsList({
                   return (
                     <tr
                       key={log.id}
-                      onClick={() => open(log)}
+                      onClick={() => setSelected(log)}
                       className="hover:bg-white/[0.025] transition-colors cursor-pointer"
                     >
                       <td className="px-5 py-4 w-28">

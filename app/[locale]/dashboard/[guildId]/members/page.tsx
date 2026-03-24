@@ -6,6 +6,7 @@ import { getScopedI18n } from "@/locales/server"
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowLeft, Search, UserX } from "lucide-react"
+import { MemberSanctionsList, MemberLog } from "./MemberSanctionsList"
 
 interface ModLog {
   id: number
@@ -71,6 +72,7 @@ export default async function MembersPage({
   const session = await auth()
   if (!session?.accessibleGuildIds.includes(guildId)) redirect(`/${locale}/dashboard`)
 
+  const isAdmin = session.adminGuildIds.includes(guildId)
   const t = await getScopedI18n("dashboard")
 
   // ── User profile view ──────────────────────────────────────────────────────
@@ -88,6 +90,44 @@ export default async function MembersPage({
     const moderators = await fetchDiscordUsers(moderatorIds)
 
     const displayName = user?.globalName ?? user?.username ?? null
+
+    const resolvedLogs: MemberLog[] = sanctions.map((s) => ({
+      id: s.id,
+      action: s.action,
+      target_id: s.target_id,
+      moderator_id: s.moderator_id,
+      reason: s.reason,
+      created_at: s.created_at?.toISOString() ?? null,
+      mod: moderators.get(s.moderator_id) ?? null,
+    }))
+
+    const targetUser = user
+      ? { id: userId, username: user.username, globalName: user.globalName ?? null, avatar: user.avatar ?? null }
+      : null
+
+    const strings = {
+      action: t("sanctions.action"),
+      target: t("sanctions.target"),
+      moderator: t("sanctions.moderator"),
+      date: t("sanctions.date"),
+      reason: t("sanctions.reason"),
+      noReason: t("sanctions.noReason"),
+      discordId: t("sanctions.discordId"),
+      noResults: t("sanctions.noResults"),
+      previous: t("sanctions.previous"),
+      next: t("sanctions.next"),
+      page: t("sanctions.page"),
+      of: t("sanctions.of"),
+      total: t("sanctions.total"),
+      details: t("sanctions.details"),
+      edit: t("sanctions.edit"),
+      editReason: t("sanctions.editReason"),
+      saveReason: t("sanctions.saveReason"),
+      cancel: t("sanctions.cancel"),
+      deleteTitle: t("sanctions.deleteTitle"),
+      deleteConfirm: t("sanctions.deleteConfirm"),
+      saved: t("sanctions.saved"),
+    }
 
     return (
       <div className="p-4 sm:p-6 md:p-8 max-w-4xl">
@@ -135,77 +175,15 @@ export default async function MembersPage({
           </div>
         </div>
 
-        {/* Sanctions table */}
-        {sanctions.length === 0 ? (
-          <div className="rounded-2xl bg-card py-16 text-center text-text/40 text-sm">
-            {t("members.noSanctions")}
-          </div>
-        ) : (
-          <div className="rounded-2xl bg-card overflow-hidden">
-            <div className="px-5 py-3.5">
-              <h2 className="text-sm font-semibold text-text/50 uppercase tracking-wide">
-                {t("members.allSanctions")}
-              </h2>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-white/[0.07]">
-                    <th className="px-5 py-3 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{t("sanctions.action")}</th>
-                    <th className="px-5 py-3 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{t("sanctions.moderator")}</th>
-                    <th className="px-5 py-3 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{t("sanctions.date")}</th>
-                    <th className="px-5 py-3 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{t("sanctions.reason")}</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/[0.07]">
-                  {sanctions.map((s) => {
-                    const style = ACTION_STYLE[s.action]
-                    const mod = moderators.get(s.moderator_id) ?? null
-                    const modName = mod?.globalName ?? mod?.username ?? null
-                    return (
-                      <tr
-                        key={s.id}
-                        className="hover:bg-white/[0.025] transition-colors"
-                      >
-                        <td className="px-5 py-3.5 w-28">
-                          <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${style?.pill ?? "bg-white/10 text-text/60"}`}>
-                            {style && <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${style.dot}`} />}
-                            {style?.label ?? s.action}
-                          </span>
-                        </td>
-                        <td className="px-5 py-3.5 w-44">
-                          <div className="flex items-center gap-2 min-w-0">
-                            <UserAvatar userId={s.moderator_id} user={mod} size={32} />
-                            <span className="text-sm truncate">
-                              {modName ?? <span className="font-mono text-text/40 text-xs">{s.moderator_id}</span>}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="px-5 py-3.5 whitespace-nowrap">
-                          <div className="text-sm text-text/70">
-                            {s.created_at?.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) ?? "—"}
-                          </div>
-                          {s.created_at && (
-                            <div className="text-[11px] text-text/35 mt-0.5">
-                              {s.created_at.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
-                            </div>
-                          )}
-                        </td>
-                        <td className="px-5 py-3.5 max-w-xs">
-                          {s.reason ? (
-                            <span className="text-sm text-text/70 line-clamp-2">{s.reason}</span>
-                          ) : (
-                            <span className="text-sm text-text/25 italic">{t("sanctions.noReason")}</span>
-                          )}
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
+        <MemberSanctionsList
+          initialLogs={resolvedLogs}
+          isAdmin={isAdmin}
+          guildId={guildId}
+          targetUser={targetUser}
+          strings={strings}
+          noSanctionsLabel={t("members.noSanctions")}
+          allSanctionsLabel={t("members.allSanctions")}
+        />
       </div>
     )
   }
