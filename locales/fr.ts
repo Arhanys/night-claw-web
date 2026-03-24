@@ -340,6 +340,12 @@ export default {
             page: "Page",
             of: "sur",
             total: "total",
+            details: "Détails de la sanction",
+            editReason: "Modifier la raison",
+            saveReason: "Enregistrer",
+            deleteTitle: "Supprimer la sanction",
+            deleteConfirm: "Êtes-vous sûr de vouloir supprimer cette sanction ? Cette action est irréversible.",
+            saved: "Enregistré",
         },
         config: {
             title: "Configuration",

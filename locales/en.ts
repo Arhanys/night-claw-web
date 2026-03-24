@@ -342,6 +342,12 @@ export default {
             page: "Page",
             of: "of",
             total: "total",
+            details: "Sanction Details",
+            editReason: "Edit reason",
+            saveReason: "Save",
+            deleteTitle: "Delete sanction",
+            deleteConfirm: "Are you sure you want to delete this sanction? This cannot be undone.",
+            saved: "Saved",
         },
         config: {
             title: "Configuration",
