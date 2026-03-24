@@ -1,10 +1,10 @@
-import { auth } from "@/lib/auth"
+import { auth, update } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import { fetchGuildBasic } from "@/lib/discord"
 import { getScopedI18n } from "@/locales/server"
 import Link from "next/link"
 import Image from "next/image"
-import { ChevronRight, Server } from "lucide-react"
+import { ChevronRight, RefreshCw, Server } from "lucide-react"
 
 function iconUrl(guildId: string, icon: string) {
   return `https://cdn.discordapp.com/icons/${guildId}/${icon}.webp?size=128`
@@ -19,6 +19,12 @@ export default async function DashboardPage({
   const session = await auth()
   if (!session) redirect("/api/auth/signin")
 
+  async function refreshAccess() {
+    "use server"
+    await update({})
+    redirect(`/${locale}/dashboard`)
+  }
+
   const t = await getScopedI18n("dashboard")
 
   const guilds = (
@@ -27,12 +33,23 @@ export default async function DashboardPage({
 
   return (
     <div className="p-4 sm:p-6 md:p-8 max-w-4xl">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-1">{t("selectServer.title")}</h1>
-        <p className="text-sm text-text/50">
-          {t("selectServer.subtitleOne")} {guilds.length}{" "}
-          {guilds.length !== 1 ? t("selectServer.servers") : t("selectServer.server")}.
-        </p>
+      <div className="mb-8 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold mb-1">{t("selectServer.title")}</h1>
+          <p className="text-sm text-text/50">
+            {t("selectServer.subtitleOne")} {guilds.length}{" "}
+            {guilds.length !== 1 ? t("selectServer.servers") : t("selectServer.server")}.
+          </p>
+        </div>
+        <form action={refreshAccess}>
+          <button
+            type="submit"
+            className="flex items-center gap-1.5 text-xs text-text/50 hover:text-text/80 transition-colors px-3 py-1.5 rounded-lg hover:bg-white/5"
+          >
+            <RefreshCw className="h-3.5 w-3.5" />
+            {t("selectServer.refresh")}
+          </button>
+        </form>
       </div>
 
       {guilds.length === 0 ? (

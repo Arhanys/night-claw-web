@@ -17,7 +17,7 @@ declare module "@auth/core/jwt" {
   }
 }
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+export const { handlers, auth, signIn, signOut, unstable_update: update } = NextAuth({
   providers: [
     Discord({
       authorization:
@@ -25,12 +25,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, account }) {
+    async jwt({ token, account, trigger }) {
       if (account?.access_token) {
         token.accessToken = account.access_token
         const { accessible, admin } = await getUserAccessibleGuilds(
           token.sub!,
           account.access_token
+        )
+        token.accessibleGuildIds = accessible
+        token.adminGuildIds = admin
+      } else if (trigger === "update" && token.accessToken) {
+        const { accessible, admin } = await getUserAccessibleGuilds(
+          token.sub!,
+          token.accessToken
         )
         token.accessibleGuildIds = accessible
         token.adminGuildIds = admin

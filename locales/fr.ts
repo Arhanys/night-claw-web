@@ -282,6 +282,7 @@ export default {
             servers: "serveurs",
             noServers: "Aucun serveur trouvé",
             noServersHint: "Assurez-vous que NightClaw est configuré sur votre serveur et que vous avez le rôle modérateur ou la permission Administrateur.",
+            refresh: "Actualiser",
         },
         overview: {
             members: "Membres",

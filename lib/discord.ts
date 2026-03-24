@@ -64,7 +64,10 @@ export async function getUserAccessibleGuilds(
 
     // 3. For non-admins, check if user holds the configured mod role
     const modRole = configMap.get(guild.id)
-    if (!modRole) continue
+    if (!modRole) {
+      console.warn(`[discord] guild ${guild.id}: no mod_role_id configured, skipping mod check for user ${userId}`)
+      continue
+    }
 
     const memberRes = await fetch(
       `${DISCORD_API}/guilds/${guild.id}/members/${userId}`,
@@ -73,7 +76,10 @@ export async function getUserAccessibleGuilds(
         cache: "no-store",
       }
     )
-    if (!memberRes.ok) continue
+    if (!memberRes.ok) {
+      console.warn(`[discord] guild ${guild.id}: bot member lookup failed (HTTP ${memberRes.status}) for user ${userId} — verify DISCORD_BOT_TOKEN and that the bot is in the guild`)
+      continue
+    }
 
     const member = await memberRes.json()
     if (Array.isArray(member.roles) && member.roles.includes(modRole)) {

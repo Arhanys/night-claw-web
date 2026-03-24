@@ -284,6 +284,7 @@ export default {
             servers: "servers",
             noServers: "No servers found",
             noServersHint: "Make sure NightClaw is set up in your server and you have the mod role or Administrator permission.",
+            refresh: "Refresh",
         },
         overview: {
             members: "Members",
