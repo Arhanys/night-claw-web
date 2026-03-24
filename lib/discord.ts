@@ -53,10 +53,7 @@ export async function getUserAccessibleGuilds(
   const admin: string[] = []
 
   for (const guild of userGuilds) {
-    if (!configMap.has(guild.id)) {
-      console.warn(`[discord] guild ${guild.id} (${guild.name}): not found in server_settings, skipping for user ${userId}`)
-      continue
-    }
+    if (!configMap.has(guild.id)) continue
 
     const isAdmin = (BigInt(guild.permissions) & ADMINISTRATOR) === ADMINISTRATOR
     if (isAdmin) {
