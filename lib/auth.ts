@@ -12,6 +12,7 @@ declare module "next-auth" {
 declare module "@auth/core/jwt" {
   interface JWT {
     accessToken?: string
+    discordId?: string
     accessibleGuildIds?: string[]
     adminGuildIds?: string[]
   }
@@ -25,18 +26,19 @@ export const { handlers, auth, signIn, signOut, unstable_update: update } = Next
     }),
   ],
   callbacks: {
-    async jwt({ token, account, trigger }) {
+    async jwt({ token, account, profile, trigger }) {
       if (account?.access_token) {
         token.accessToken = account.access_token
+        token.discordId = (profile as { id?: string })?.id ?? token.sub!
         const { accessible, admin } = await getUserAccessibleGuilds(
-          token.sub!,
+          token.discordId,
           account.access_token
         )
         token.accessibleGuildIds = accessible
         token.adminGuildIds = admin
-      } else if (trigger === "update" && token.accessToken) {
+      } else if (trigger === "update" && token.accessToken && token.discordId) {
         const { accessible, admin } = await getUserAccessibleGuilds(
-          token.sub!,
+          token.discordId,
           token.accessToken
         )
         token.accessibleGuildIds = accessible
