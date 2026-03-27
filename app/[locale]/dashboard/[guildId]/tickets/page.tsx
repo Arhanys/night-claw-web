@@ -8,8 +8,6 @@ import { ArrowLeft } from "lucide-react"
 import { TicketsList, ResolvedTicket } from "./TicketsList"
 
 const PAGE_SIZE = 20
-const VALID_STATUSES = ["open", "closed"] as const
-type TicketStatus = (typeof VALID_STATUSES)[number]
 
 interface TicketRecord {
   id: number
@@ -28,10 +26,10 @@ export default async function TicketsPage({
   searchParams,
 }: {
   params: Promise<{ locale: string; guildId: string }>
-  searchParams: Promise<{ page?: string; status?: string }>
+  searchParams: Promise<{ page?: string }>
 }) {
   const { locale, guildId } = await params
-  const { page = "1", status } = await searchParams
+  const { page = "1" } = await searchParams
 
   const session = await auth()
   if (!session?.accessibleGuildIds.includes(guildId)) redirect(`/${locale}/dashboard`)
@@ -39,16 +37,8 @@ export default async function TicketsPage({
   const t = await getScopedI18n("dashboard")
 
   const pageNum = Math.max(1, parseInt(page, 10) || 1)
-  const statusFilter =
-    status && (VALID_STATUSES as readonly string[]).includes(status)
-      ? (status as TicketStatus)
-      : undefined
 
-  const where = {
-    guild_id: guildId,
-    ...(statusFilter === "open" ? { closed_at: null } : {}),
-    ...(statusFilter === "closed" ? { closed_at: { not: null } } : {}),
-  }
+  const where = { guild_id: guildId }
 
   const [tickets, total]: [TicketRecord[], number] = await Promise.all([
     prisma.tickets.findMany({
@@ -68,10 +58,9 @@ export default async function TicketsPage({
 
   const totalPages = Math.ceil(total / PAGE_SIZE)
 
-  const buildHref = (p: number, s?: string) => {
+  const buildHref = (p: number) => {
     const q = new URLSearchParams()
     if (p > 1) q.set("page", String(p))
-    if (s) q.set("status", s)
     const qs = q.toString()
     return `/${locale}/dashboard/${guildId}/tickets${qs ? `?${qs}` : ""}`
   }
@@ -129,35 +118,7 @@ export default async function TicketsPage({
           <h1 className="text-2xl font-bold">{t("tickets.title")}</h1>
           <p className="text-sm text-text-muted mt-1">
             {total.toLocaleString()} {total !== 1 ? t("tickets.tickets") : t("tickets.ticket")}
-            {statusFilter ? ` · ${statusFilter === "open" ? t("tickets.open") : t("tickets.closed")} ${t("tickets.filterOnly")}` : ""}
           </p>
-        </div>
-
-        {/* Filter pills */}
-        <div className="flex flex-wrap items-center gap-1.5">
-          <Link
-            href={buildHref(1)}
-            className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
-              !statusFilter
-                ? "bg-accent/15 text-accent border border-accent/30"
-                : "bg-elevated border border-border text-text-muted hover:text-text hover:border-accent/20"
-            }`}
-          >
-            {t("tickets.all")}
-          </Link>
-          {VALID_STATUSES.map((s) => (
-            <Link
-              key={s}
-              href={buildHref(1, s)}
-              className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
-                statusFilter === s
-                  ? "bg-accent/15 text-accent border border-accent/30"
-                  : "bg-elevated border border-border text-text-muted hover:text-text hover:border-accent/20"
-              }`}
-            >
-              {s === "open" ? t("tickets.open") : t("tickets.closed")}
-            </Link>
-          ))}
         </div>
       </div>
 
@@ -167,8 +128,8 @@ export default async function TicketsPage({
         pageNum={pageNum}
         totalPages={totalPages}
         total={total}
-        prevHref={pageNum > 1 ? buildHref(pageNum - 1, statusFilter) : null}
-        nextHref={pageNum < totalPages ? buildHref(pageNum + 1, statusFilter) : null}
+        prevHref={pageNum > 1 ? buildHref(pageNum - 1) : null}
+        nextHref={pageNum < totalPages ? buildHref(pageNum + 1) : null}
       />
     </div>
   )
