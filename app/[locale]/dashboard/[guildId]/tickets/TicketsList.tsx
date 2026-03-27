@@ -89,7 +89,12 @@ function UserChip({ userId, user, label, discordIdLabel }: { userId: string; use
   )
 }
 
+function proxyUrl(url: string) {
+  return `/api/transcript?url=${encodeURIComponent(url)}`
+}
+
 function TranscriptModal({ url, title, onClose, openInTab }: { url: string; title: string; onClose: () => void; openInTab: string }) {
+  const proxied = proxyUrl(url)
   return (
     <div
       className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] flex flex-col"
@@ -107,7 +112,7 @@ function TranscriptModal({ url, title, onClose, openInTab }: { url: string; titl
           </div>
           <div className="flex items-center gap-2">
             <a
-              href={url}
+              href={proxied}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 text-text/60 hover:text-text text-xs font-medium transition-colors"
@@ -125,7 +130,7 @@ function TranscriptModal({ url, title, onClose, openInTab }: { url: string; titl
         </div>
         {/* Iframe */}
         <iframe
-          src={url}
+          src={proxied}
           className="flex-1 w-full border-0 bg-white"
           title="Ticket transcript"
         />
@@ -249,7 +254,7 @@ function TicketModal({
                   {strings.viewTranscript}
                 </button>
                 <a
-                  href={ticket.transcript_url}
+                  href={proxyUrl(ticket.transcript_url)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-1.5 text-sm text-text/40 hover:text-text/70 transition-colors"
