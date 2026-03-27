@@ -5,7 +5,7 @@ import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 import { signOut } from "next-auth/react"
-import { LayoutDashboard, Shield, Settings, LogOut, ChevronRight, ArrowUpLeft, Users, Scale, Menu, X } from "lucide-react"
+import { LayoutDashboard, Shield, Settings, LogOut, ChevronRight, ArrowUpLeft, Users, Scale, Ticket, Menu, X } from "lucide-react"
 import { useCurrentLocale, useScopedI18n } from "@/locales/client"
 import LanguageSelector from "@/components/LanguageSelector"
 
@@ -44,6 +44,7 @@ export function DashboardSidebar({ guilds, userName, userImage }: Props) {
     { label: t("sidebar.sanctions"), segment: "/sanctions", icon: Shield },
     { label: t("sidebar.config"), segment: "/config", icon: Settings },
     { label: t("sidebar.appeals"), segment: "/appeals", icon: Scale },
+    { label: t("sidebar.tickets"), segment: "/tickets", icon: Ticket },
   ]
 
   return (

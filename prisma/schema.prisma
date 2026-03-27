@@ -66,6 +66,18 @@ model server_settings {
   main_invite_url       String?
 }
 
+model tickets {
+  id             Int       @id @default(autoincrement())
+  guild_id       String
+  channel_id     String
+  channel_name   String?
+  user_id        String
+  opened_at      DateTime? @default(now()) @db.Timestamp(6)
+  closed_at      DateTime? @db.Timestamp(6)
+  closed_by      String?
+  transcript_url String?
+}
+
 model users {
   id         String    @id
   username   String?
