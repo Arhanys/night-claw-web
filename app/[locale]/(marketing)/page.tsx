@@ -1,6 +1,7 @@
 import { getI18n } from "@/locales/server"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { BOT_INVITE_URL } from "@/lib/constants"
 import AnimatedHero from "@/components/marketing/AnimatedHero"
 import ScrollReveal from "@/components/marketing/ScrollReveal"
 import GlowCard from "@/components/ui/GlowCard"
@@ -66,10 +67,12 @@ export default async function Home() {
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-14">
-              <Button size="lg" className="hero-cta shadow-xl shadow-accent/25 group">
-                {t("home.hero.ctaPrimary")}
-                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              <Link href={BOT_INVITE_URL} target="_blank" rel="noopener noreferrer">
+                <Button size="lg" className="hero-cta shadow-xl shadow-accent/25 group">
+                  {t("home.hero.ctaPrimary")}
+                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
               <Link href="/guide#top">
                 <Button variant="outline" size="lg" className="hero-cta w-full sm:w-auto">
                   {t("home.hero.ctaSecondary")}
@@ -250,10 +253,12 @@ export default async function Home() {
               <p className="text-lg text-text-muted mb-10 max-w-xl mx-auto">
                 {t("home.footerSection.subtitle")}
               </p>
-              <Button size="lg" className="shadow-xl shadow-accent/30 group">
-                {t("home.footerSection.ctaPrimary")}
-                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              <Link href={BOT_INVITE_URL} target="_blank" rel="noopener noreferrer">
+                <Button size="lg" className="shadow-xl shadow-accent/30 group">
+                  {t("home.footerSection.ctaPrimary")}
+                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
               <p className="text-xs text-text-muted mt-6 opacity-60">
                 {t("home.footerSection.smallLines")}
               </p>

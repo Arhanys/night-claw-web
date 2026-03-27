@@ -1,8 +1,10 @@
 import { getI18n } from "@/locales/server"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import GlowCard from "@/components/ui/GlowCard"
 import ScrollReveal from "@/components/marketing/ScrollReveal"
 import { Rocket, Zap, Wrench, ArrowRight } from "lucide-react"
+import { BOT_INVITE_URL } from "@/lib/constants"
 
 const reasonIcons = [Rocket, Zap, Wrench]
 
@@ -147,10 +149,12 @@ export default async function About() {
               {t("about.footer.content")}
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
-              <Button size="lg" className="group shadow-xl shadow-accent/25">
-                {t("about.footer.ctaOne")}
-                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              <Link href={BOT_INVITE_URL} target="_blank" rel="noopener noreferrer">
+                <Button size="lg" className="group shadow-xl shadow-accent/25">
+                  {t("about.footer.ctaOne")}
+                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
               <Button variant="secondary" size="lg">
                 {t("about.footer.ctaTwo")}
               </Button>
