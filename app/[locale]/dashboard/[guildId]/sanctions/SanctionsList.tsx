@@ -314,7 +314,7 @@ export function SanctionsList({
             <button
               key={log.id}
               onClick={() => setSelected(log)}
-              className="w-full text-left rounded-xl bg-card ring-1 ring-white/[0.07] p-4 space-y-3 hover:bg-white/[0.03] transition-colors"
+              className="w-full text-left rounded-xl bg-card border border-border p-4 space-y-3 hover:bg-elevated transition-colors"
             >
               <div className="flex items-center justify-between gap-2">
                 <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${style?.pill ?? "bg-white/10 text-text/60"}`}>
@@ -364,7 +364,7 @@ export function SanctionsList({
       </div>
 
       {/* Desktop table */}
-      <div className="hidden md:block rounded-2xl bg-card overflow-hidden">
+      <div className="hidden md:block rounded-2xl bg-card border border-border overflow-hidden">
         {logs.length === 0 ? (
           <div className="py-20 text-center text-text/40 text-sm">
             {strings.noResults}
@@ -373,12 +373,12 @@ export function SanctionsList({
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-white/[0.07]">
-                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{strings.action}</th>
-                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{strings.target}</th>
-                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{strings.moderator}</th>
-                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{strings.date}</th>
-                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{strings.reason}</th>
+                <tr className="border-b border-border">
+                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text-muted uppercase tracking-widest">{strings.action}</th>
+                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text-muted uppercase tracking-widest">{strings.target}</th>
+                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text-muted uppercase tracking-widest">{strings.moderator}</th>
+                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text-muted uppercase tracking-widest">{strings.date}</th>
+                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text-muted uppercase tracking-widest">{strings.reason}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/[0.07]">
@@ -394,7 +394,7 @@ export function SanctionsList({
                     <tr
                       key={log.id}
                       onClick={() => setSelected(log)}
-                      className="hover:bg-white/[0.025] transition-colors cursor-pointer"
+                      className="hover:bg-elevated/80 transition-colors cursor-pointer border-b border-border last:border-0"
                     >
                       <td className="px-5 py-4 w-28">
                         <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${style?.pill ?? "bg-white/10 text-text/60"}`}>
@@ -486,8 +486,8 @@ export function SanctionsList({
               aria-disabled={!prevHref}
               className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-sm font-medium transition-colors ${
                 !prevHref
-                  ? "border-border/20 text-text/20 cursor-not-allowed"
-                  : "border-border/50 hover:bg-white/5 text-text/70 hover:text-text"
+                  ? "border-border text-text-muted/30 cursor-not-allowed"
+                  : "border-border bg-card hover:bg-elevated hover:border-accent/30 text-text-muted hover:text-text"
               }`}
             >
               <ChevronLeft className="h-4 w-4" />
@@ -498,8 +498,8 @@ export function SanctionsList({
               aria-disabled={!nextHref}
               className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-sm font-medium transition-colors ${
                 !nextHref
-                  ? "border-border/20 text-text/20 cursor-not-allowed"
-                  : "border-border/50 hover:bg-white/5 text-text/70 hover:text-text"
+                  ? "border-border text-text-muted/30 cursor-not-allowed"
+                  : "border-border bg-card hover:bg-elevated hover:border-accent/30 text-text-muted hover:text-text"
               }`}
             >
               {strings.next}

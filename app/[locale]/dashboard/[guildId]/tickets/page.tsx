@@ -117,7 +117,7 @@ export default async function TicketsPage({
       {/* Back */}
       <Link
         href={`/${locale}/dashboard/${guildId}`}
-        className="inline-flex items-center gap-1.5 text-sm text-text/50 hover:text-text/80 transition-colors mb-6"
+        className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors mb-6"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
         {t("tickets.backToOverview")}
@@ -127,7 +127,7 @@ export default async function TicketsPage({
       <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold">{t("tickets.title")}</h1>
-          <p className="text-sm text-text/50 mt-1">
+          <p className="text-sm text-text-muted mt-1">
             {total.toLocaleString()} {total !== 1 ? t("tickets.tickets") : t("tickets.ticket")}
             {statusFilter ? ` · ${statusFilter === "open" ? t("tickets.open") : t("tickets.closed")} ${t("tickets.filterOnly")}` : ""}
           </p>
@@ -139,8 +139,8 @@ export default async function TicketsPage({
             href={buildHref(1)}
             className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
               !statusFilter
-                ? "bg-accent text-white"
-                : "bg-white/5 text-text/60 hover:text-text"
+                ? "bg-accent/15 text-accent border border-accent/30"
+                : "bg-elevated border border-border text-text-muted hover:text-text hover:border-accent/20"
             }`}
           >
             {t("tickets.all")}
@@ -151,8 +151,8 @@ export default async function TicketsPage({
               href={buildHref(1, s)}
               className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
                 statusFilter === s
-                  ? "bg-accent text-white"
-                  : "bg-white/5 text-text/60 hover:text-text"
+                  ? "bg-accent/15 text-accent border border-accent/30"
+                  : "bg-elevated border border-border text-text-muted hover:text-text hover:border-accent/20"
               }`}
             >
               {s === "open" ? t("tickets.open") : t("tickets.closed")}

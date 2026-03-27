@@ -130,7 +130,7 @@ export default async function AppealsPage({
       {/* Back */}
       <Link
         href={`/${locale}/dashboard/${guildId}`}
-        className="inline-flex items-center gap-1.5 text-sm text-text/50 hover:text-text/80 transition-colors mb-6"
+        className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors mb-6"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
         {t("appeals.backToOverview")}
@@ -140,7 +140,7 @@ export default async function AppealsPage({
       <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold">{t("appeals.title")}</h1>
-          <p className="text-sm text-text/50 mt-1">
+          <p className="text-sm text-text-muted mt-1">
             {total.toLocaleString()} {total !== 1 ? t("sanctions.actions") : t("sanctions.action")}
             {statusFilter ? ` · ${t(`appeals.statuses.${statusFilter}` as any)} ${t("sanctions.filterOnly")}` : ""}
           </p>
@@ -152,8 +152,8 @@ export default async function AppealsPage({
             href={buildHref(1)}
             className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
               !statusFilter
-                ? "bg-accent text-white"
-                : "bg-white/5 text-text/60 hover:text-text"
+                ? "bg-accent/15 text-accent border border-accent/30"
+                : "bg-elevated border border-border text-text-muted hover:text-text hover:border-accent/20"
             }`}
           >
             {t("appeals.all")}
@@ -166,8 +166,8 @@ export default async function AppealsPage({
                 href={buildHref(1, s)}
                 className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
                   statusFilter === s
-                    ? "bg-accent text-white"
-                    : "bg-white/5 text-text/60 hover:text-text"
+                    ? "bg-accent/15 text-accent border border-accent/30"
+                    : "bg-elevated border border-border text-text-muted hover:text-text hover:border-accent/20"
                 }`}
               >
                 {t(`appeals.statuses.${s}` as any)}
@@ -192,7 +192,7 @@ export default async function AppealsPage({
             ? `https://cdn.discordapp.com/avatars/${appeal.user_id}/${appellant.avatar}.webp?size=32`
             : null
           return (
-            <div key={appeal.id} className="rounded-xl bg-card ring-1 ring-white/[0.07] p-4 space-y-3">
+            <div key={appeal.id} className="rounded-xl bg-card border border-border p-4 space-y-3">
               {/* Status + date */}
               <div className="flex items-center justify-between gap-2">
                 <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${style?.pill ?? "bg-white/10 text-text/60"}`}>
@@ -242,7 +242,7 @@ export default async function AppealsPage({
       </div>
 
       {/* Desktop table */}
-      <div className="hidden md:block rounded-2xl bg-card overflow-hidden">
+      <div className="hidden md:block rounded-2xl bg-card border border-border overflow-hidden">
         {appeals.length === 0 ? (
           <div className="py-20 text-center text-text/40 text-sm">
             {t("appeals.noResults")}
@@ -251,13 +251,13 @@ export default async function AppealsPage({
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-white/[0.07]">
-                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{t("appeals.status")}</th>
-                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{t("appeals.appellant")}</th>
-                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{t("appeals.appealReason")}</th>
-                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{t("appeals.banReason")}</th>
-                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{t("appeals.reviewedBy")}</th>
-                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{t("appeals.date")}</th>
+                <tr className="border-b border-border">
+                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text-muted uppercase tracking-widest">{t("appeals.status")}</th>
+                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text-muted uppercase tracking-widest">{t("appeals.appellant")}</th>
+                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text-muted uppercase tracking-widest">{t("appeals.appealReason")}</th>
+                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text-muted uppercase tracking-widest">{t("appeals.banReason")}</th>
+                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text-muted uppercase tracking-widest">{t("appeals.reviewedBy")}</th>
+                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text-muted uppercase tracking-widest">{t("appeals.date")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/[0.07]">
@@ -266,7 +266,7 @@ export default async function AppealsPage({
                   return (
                     <tr
                       key={appeal.id}
-                      className="hover:bg-white/[0.025] transition-colors"
+                      className="hover:bg-elevated/80 transition-colors border-b border-border last:border-0"
                     >
                       <td className="px-5 py-4 w-32">
                         <span
@@ -347,8 +347,8 @@ export default async function AppealsPage({
               aria-disabled={pageNum <= 1}
               className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-sm font-medium transition-colors ${
                 pageNum <= 1
-                  ? "border-border/20 text-text/20 cursor-not-allowed"
-                  : "border-border/50 hover:bg-white/5 text-text/70 hover:text-text"
+                  ? "border-border text-text-muted/30 cursor-not-allowed"
+                  : "border-border bg-card hover:bg-elevated hover:border-accent/30 text-text-muted hover:text-text"
               }`}
             >
               <ChevronLeft className="h-4 w-4" />
@@ -359,8 +359,8 @@ export default async function AppealsPage({
               aria-disabled={pageNum >= totalPages}
               className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-sm font-medium transition-colors ${
                 pageNum >= totalPages
-                  ? "border-border/20 text-text/20 cursor-not-allowed"
-                  : "border-border/50 hover:bg-white/5 text-text/70 hover:text-text"
+                  ? "border-border text-text-muted/30 cursor-not-allowed"
+                  : "border-border bg-card hover:bg-elevated hover:border-accent/30 text-text-muted hover:text-text"
               }`}
             >
               {t("appeals.next")}

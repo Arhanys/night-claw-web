@@ -36,7 +36,7 @@ export default async function DashboardPage({
       <div className="mb-8 flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold mb-1">{t("selectServer.title")}</h1>
-          <p className="text-sm text-text/50">
+          <p className="text-sm text-text-muted">
             {t("selectServer.subtitleOne")} {guilds.length}{" "}
             {guilds.length !== 1 ? t("selectServer.servers") : t("selectServer.server")}.
           </p>
@@ -44,7 +44,7 @@ export default async function DashboardPage({
         <form action={refreshAccess}>
           <button
             type="submit"
-            className="flex items-center gap-1.5 text-xs text-text/50 hover:text-text/80 transition-colors px-3 py-1.5 rounded-lg hover:bg-white/5"
+            className="flex items-center gap-1.5 text-xs text-text-muted hover:text-text transition-colors px-3 py-1.5 rounded-lg border border-border bg-card hover:bg-elevated hover:border-accent/30"
           >
             <RefreshCw className="h-3.5 w-3.5" />
             {t("selectServer.refresh")}
@@ -54,9 +54,9 @@ export default async function DashboardPage({
 
       {guilds.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <Server className="h-12 w-12 text-text/20 mb-4" />
-          <p className="font-medium text-text/60">{t("selectServer.noServers")}</p>
-          <p className="text-sm text-text/40 mt-1">{t("selectServer.noServersHint")}</p>
+          <Server className="h-12 w-12 text-text-muted mb-4" />
+          <p className="font-medium text-text-muted">{t("selectServer.noServers")}</p>
+          <p className="text-sm text-text-muted/60 mt-1">{t("selectServer.noServersHint")}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -64,7 +64,7 @@ export default async function DashboardPage({
             <Link
               key={guild.id}
               href={`/${locale}/dashboard/${guild.id}`}
-              className="group flex items-center gap-4 p-4 rounded-xl bg-card hover:bg-accent/5 transition-all"
+              className="group flex items-center gap-4 p-4 rounded-2xl bg-card border border-border hover:bg-elevated hover:border-accent/30 transition-all duration-200"
             >
               {guild.icon ? (
                 <Image
@@ -72,7 +72,7 @@ export default async function DashboardPage({
                   alt={guild.name}
                   width={48}
                   height={48}
-                  className="rounded-2xl shrink-0"
+                  className="rounded-2xl shrink-0 ring-1 ring-border"
                 />
               ) : (
                 <div className="w-12 h-12 rounded-2xl bg-accent/20 flex items-center justify-center text-lg font-bold shrink-0">
@@ -80,7 +80,7 @@ export default async function DashboardPage({
                 </div>
               )}
               <span className="font-semibold flex-1 truncate">{guild.name}</span>
-              <ChevronRight className="h-4 w-4 text-text/30 group-hover:text-accent/60 transition-colors shrink-0" />
+              <ChevronRight className="h-4 w-4 text-text-muted opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all duration-200 shrink-0" />
             </Link>
           ))}
         </div>

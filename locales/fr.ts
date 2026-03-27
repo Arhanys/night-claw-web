@@ -306,6 +306,17 @@ export default {
             configDescMod: "Voir les paramètres du bot",
             modTeam: "Équipe de modération",
             noMods: "Aucun modérateur trouvé.",
+            charts: {
+                sanctionsBreakdown: "Répartition des sanctions",
+                sanctionsBreakdownSub: "90 derniers jours",
+                activityTimeline: "Historique d'activité",
+                activityTimelineSub: "30 derniers jours",
+                appealStatus: "État des appels",
+                ticketResolution: "Résolution des tickets",
+                ticketResolutionSub: "30 derniers jours",
+                noData: "Aucune donnée disponible",
+                resolved: "Résolus",
+            },
         },
         members: {
             title: "Recherche de membre",

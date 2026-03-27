@@ -88,7 +88,7 @@ export function MemberSanctionsList({
         />
       )}
 
-      <div className="rounded-2xl bg-card overflow-hidden">
+      <div className="rounded-2xl bg-card border border-border overflow-hidden">
         <div className="px-5 py-3.5">
           <h2 className="text-sm font-semibold text-text/50 uppercase tracking-wide">
             {allSanctionsLabel}
@@ -97,11 +97,11 @@ export function MemberSanctionsList({
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-white/[0.07]">
-                <th className="px-5 py-3 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{strings.action}</th>
-                <th className="px-5 py-3 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{strings.moderator}</th>
-                <th className="px-5 py-3 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{strings.date}</th>
-                <th className="px-5 py-3 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{strings.reason}</th>
+              <tr className="border-b border-border">
+                <th className="px-5 py-3 text-left text-[11px] font-semibold text-text-muted uppercase tracking-widest">{strings.action}</th>
+                <th className="px-5 py-3 text-left text-[11px] font-semibold text-text-muted uppercase tracking-widest">{strings.moderator}</th>
+                <th className="px-5 py-3 text-left text-[11px] font-semibold text-text-muted uppercase tracking-widest">{strings.date}</th>
+                <th className="px-5 py-3 text-left text-[11px] font-semibold text-text-muted uppercase tracking-widest">{strings.reason}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/[0.07]">
@@ -114,7 +114,7 @@ export function MemberSanctionsList({
                   <tr
                     key={s.id}
                     onClick={() => setSelectedId(s.id)}
-                    className="hover:bg-white/[0.025] transition-colors cursor-pointer"
+                    className="hover:bg-elevated/80 transition-colors cursor-pointer border-b border-border last:border-0"
                   >
                     <td className="px-5 py-3.5 w-28">
                       <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${style?.pill ?? "bg-white/10 text-text/60"}`}>

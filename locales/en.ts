@@ -308,6 +308,17 @@ export default {
             configDescMod: "View bot settings",
             modTeam: "Moderation Team",
             noMods: "No moderators found.",
+            charts: {
+                sanctionsBreakdown: "Sanctions Breakdown",
+                sanctionsBreakdownSub: "Last 90 days",
+                activityTimeline: "Activity Timeline",
+                activityTimelineSub: "Past 30 days",
+                appealStatus: "Appeal Status",
+                ticketResolution: "Ticket Resolution",
+                ticketResolutionSub: "Past 30 days",
+                noData: "No data available",
+                resolved: "Resolved",
+            },
         },
         members: {
             title: "Member Lookup",

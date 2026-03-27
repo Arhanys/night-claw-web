@@ -1,158 +1,164 @@
-import { Button } from "@/components/ui/button";
-import { getI18n } from "@/locales/server";
+import { getI18n } from "@/locales/server"
+import { Button } from "@/components/ui/button"
+import GlowCard from "@/components/ui/GlowCard"
+import ScrollReveal from "@/components/marketing/ScrollReveal"
+import { Rocket, Zap, Wrench, ArrowRight } from "lucide-react"
+
+const reasonIcons = [Rocket, Zap, Wrench]
 
 export default async function About() {
-  const t = await getI18n();
+  const t = await getI18n()
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="section-glow-secondary">
-        <div className="container mx-auto px-6 pt-16 pb-20 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+
+      {/* ─── Page header ────────────────────────────────── */}
+      <div className="section-glow-secondary relative overflow-hidden">
+        <div className="absolute inset-0 bg-dot-grid opacity-[0.03] pointer-events-none" />
+        <div className="container mx-auto px-6 pt-24 pb-28 text-center relative z-10">
+          <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase mb-5 bg-accent-secondary/10 text-accent-secondary border border-accent-secondary/25">
+            About
+          </span>
+          <h1 className="text-5xl md:text-6xl font-bold mb-5 leading-tight">
             {t("about.title")}
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-text-muted max-w-2xl mx-auto leading-relaxed">
             {t("about.subtitle")}
           </p>
         </div>
       </div>
 
-      <div className="container mx-auto px-6 py-12">
-        <section className="mb-16">
-          <div className="flex items-center mb-8">
-            <div className="w-1 h-8 bg-accent rounded-full mr-4"></div>
-            <h2 className="text-3xl font-bold text-foreground">
-              {t("about.sectionOne.title")}
-            </h2>
+      <div className="container mx-auto px-6 py-16 max-w-4xl space-y-20">
+
+        {/* ─── Section One ────────────────────────────── */}
+        <section>
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-1 h-8 bg-accent rounded-full" />
+            <h2 className="text-3xl font-bold">{t("about.sectionOne.title")}</h2>
           </div>
 
-          <div className="bg-card rounded-lg p-8 border border-border shadow-sm">
-            <div className="prose prose-lg max-w-none">
-              <p className="text-muted-foreground leading-relaxed mb-6">
-                {t("about.sectionOne.content.paragraphOne")}
+          <GlowCard glow="violet" padding="p-8" hover={false}>
+            <p className="text-text-muted leading-relaxed mb-7 text-[15px]">
+              {t("about.sectionOne.content.paragraphOne")}
+            </p>
+
+            {/* Problem box */}
+            <div className="relative bg-accent/8 border-l-2 border-accent rounded-r-xl p-6 mb-7">
+              <p className="font-semibold text-text mb-1.5">
+                {t("about.sectionOne.content.problemBox.title")}
               </p>
-
-              <div className="bg-accent/10 rounded-lg p-6 border-l-4 border-accent mb-6">
-                <p className="text-foreground font-medium mb-2">
-                  {t("about.sectionOne.content.problemBox.title")}
-                </p>
-                <p className="text-muted-foreground">
-                  {t("about.sectionOne.content.problemBox.content")}
-                </p>
-              </div>
-
-              <p className="text-muted-foreground leading-relaxed">
-                {t("about.sectionOne.content.paragraphTwo.partOne")}
-                <span className="text-accent font-semibold">
-                  {t("about.sectionOne.content.paragraphTwo.highlight")}
-                </span>
-                .{t("about.sectionOne.content.paragraphTwo.partTwo")}
+              <p className="text-text-muted text-[14px] leading-relaxed">
+                {t("about.sectionOne.content.problemBox.content")}
               </p>
             </div>
-          </div>
+
+            <p className="text-text-muted leading-relaxed text-[15px]">
+              {t("about.sectionOne.content.paragraphTwo.partOne")}{" "}
+              <span className="text-accent font-semibold">
+                {t("about.sectionOne.content.paragraphTwo.highlight")}
+              </span>{" "}
+              {t("about.sectionOne.content.paragraphTwo.partTwo")}
+            </p>
+          </GlowCard>
         </section>
 
-        <section className="mb-16">
-          <div className="flex items-center mb-8">
-            <div className="w-1 h-8 bg-accent-secondary rounded-full mr-4"></div>
-            <h2 className="text-3xl font-bold text-foreground">
-              {t("about.sectionTwo.title")}
-            </h2>
-          </div>
+        {/* ─── Section Two ────────────────────────────── */}
+        <section>
+          <ScrollReveal>
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-1 h-8 bg-accent-secondary rounded-full" />
+              <h2 className="text-3xl font-bold">{t("about.sectionTwo.title")}</h2>
+            </div>
+          </ScrollReveal>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-card rounded-lg p-6 border border-border shadow-sm">
-              <h3 className="text-xl font-semibold text-foreground mb-4">
-                {t("about.sectionTwo.cardOne.title")}
-              </h3>
-              <p className="text-muted-foreground leading-relaxed mb-4">
+          <ScrollReveal className="grid md:grid-cols-2 gap-6" stagger={0.15}>
+            <GlowCard glow="violet" padding="p-7">
+              {/* Dev avatar */}
+              <div className="w-12 h-12 rounded-2xl bg-accent/15 text-accent font-bold flex items-center justify-center text-xl mb-5">
+                A
+              </div>
+              <h3 className="text-xl font-bold mb-3">{t("about.sectionTwo.cardOne.title")}</h3>
+              <p className="text-text-muted leading-relaxed mb-5 text-[14px]">
                 {t("about.sectionTwo.cardOne.content")}
               </p>
-              <div className="flex gap-2">
-                <span className="px-3 py-1 bg-accent/20 text-accent rounded-md text-sm font-medium">
+              <div className="flex gap-2 flex-wrap">
+                <span className="px-3 py-1.5 bg-accent/12 text-accent border border-accent/25 rounded-lg text-xs font-semibold">
                   {t("about.sectionTwo.cardOne.badgeOne")}
                 </span>
-                <span className="px-3 py-1 bg-accent-secondary/20 text-accent-secondary rounded-md text-sm font-medium">
+                <span className="px-3 py-1.5 bg-accent-secondary/12 text-accent-secondary border border-accent-secondary/25 rounded-lg text-xs font-semibold">
                   {t("about.sectionTwo.cardOne.badgeTwo")}
                 </span>
               </div>
-            </div>
+            </GlowCard>
 
-            <div className="bg-card rounded-lg p-6 border border-border shadow-sm">
-              <h3 className="text-xl font-semibold text-foreground mb-4">
-                {t("about.sectionTwo.cardTwo.title")}
-              </h3>
-              <p className="text-muted-foreground leading-relaxed mb-4">
+            <GlowCard glow="cyan" padding="p-7">
+              <div className="w-12 h-12 rounded-2xl bg-accent-secondary/15 text-accent-secondary font-bold flex items-center justify-center text-xl mb-5">
+                🎯
+              </div>
+              <h3 className="text-xl font-bold mb-3">{t("about.sectionTwo.cardTwo.title")}</h3>
+              <p className="text-text-muted leading-relaxed mb-4 text-[14px]">
                 {t("about.sectionTwo.cardTwo.content")}
               </p>
-              <p className="text-muted-foreground leading-relaxed">
+              <p className="text-text-muted text-[13px] italic border-l-2 border-accent-secondary/30 pl-3">
                 {t("about.sectionTwo.cardTwo.suggestion")}
               </p>
-            </div>
-          </div>
+            </GlowCard>
+          </ScrollReveal>
         </section>
 
-        <section className="mb-16">
-          <div className="bg-linear-to-br from-muted/50 to-muted/20 rounded-lg p-8 border border-border">
-            <h3 className="text-2xl font-bold text-foreground mb-6 text-center">
-              {t("about.sectionThree.title")}
-            </h3>
-
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="text-center">
-                <div className="w-12 h-12 bg-accent rounded-lg flex items-center justify-center mx-auto mb-3">
-                  <span className="text-background font-bold text-lg">🚀</span>
-                </div>
-                <h4 className="font-semibold text-foreground mb-2">
-                  {t("about.sectionThree.reasonOne.title")}
-                </h4>
-                <p className="text-muted-foreground text-sm">
-                  {t("about.sectionThree.reasonOne.content")}
-                </p>
+        {/* ─── Section Three ──────────────────────────── */}
+        <ScrollReveal>
+          <section>
+            <GlowCard glow="violet" padding="p-10" hover={false}>
+              <h3 className="text-2xl font-bold text-center mb-6">
+                {t("about.sectionThree.title")}
+              </h3>
+              <div className="grid md:grid-cols-3 gap-8">
+                {[
+                  { key: "reasonOne", color: "text-accent", bg: "bg-accent/10", border: "border-accent/20" },
+                  { key: "reasonTwo", color: "text-accent-secondary", bg: "bg-accent-secondary/10", border: "border-accent-secondary/20" },
+                  { key: "reasonThree", color: "text-accent", bg: "bg-accent/10", border: "border-accent/20" },
+                ].map(({ key, color, bg, border }, i) => {
+                  const Icon = reasonIcons[i]
+                  return (
+                    <div key={key} className="text-center">
+                      <div className={`w-12 h-12 ${bg} border ${border} rounded-2xl flex items-center justify-center mx-auto mb-4`}>
+                        <Icon className={`h-6 w-6 ${color}`} />
+                      </div>
+                      <h4 className="font-bold mb-2">
+                        {(t as any)(`about.sectionThree.${key}.title`)}
+                      </h4>
+                      <p className="text-text-muted text-sm leading-relaxed">
+                        {(t as any)(`about.sectionThree.${key}.content`)}
+                      </p>
+                    </div>
+                  )
+                })}
               </div>
+            </GlowCard>
+          </section>
+        </ScrollReveal>
 
-              <div className="text-center">
-                <div className="w-12 h-12 bg-accent-secondary rounded-lg flex items-center justify-center mx-auto mb-3">
-                  <span className="text-background font-bold text-lg">⚡</span>
-                </div>
-                <h4 className="font-semibold text-foreground mb-2">
-                  {t("about.sectionThree.reasonTwo.title")}
-                </h4>
-                <p className="text-muted-foreground text-sm">
-                  {t("about.sectionThree.reasonTwo.content")}
-                </p>
-              </div>
-
-              <div className="text-center">
-                <div className="w-12 h-12 bg-accent rounded-lg flex items-center justify-center mx-auto mb-3">
-                  <span className="text-background font-bold text-lg">🛠️</span>
-                </div>
-                <h4 className="font-semibold text-foreground mb-2">
-                  {t("about.sectionThree.reasonThree.title")}
-                </h4>
-                <p className="text-muted-foreground text-sm">
-                  {t("about.sectionThree.reasonThree.content")}
-                </p>
-              </div>
+        {/* ─── Footer CTA ─────────────────────────────── */}
+        <ScrollReveal>
+          <GlowCard glow="cyan" className="text-center" padding="p-10" hover={false}>
+            <h3 className="text-2xl font-bold mb-4">{t("about.footer.title")}</h3>
+            <p className="text-text-muted mb-8 max-w-xl mx-auto leading-relaxed">
+              {t("about.footer.content")}
+            </p>
+            <div className="flex gap-4 justify-center flex-wrap">
+              <Button size="lg" className="group shadow-xl shadow-accent/25">
+                {t("about.footer.ctaOne")}
+                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </Button>
+              <Button variant="secondary" size="lg">
+                {t("about.footer.ctaTwo")}
+              </Button>
             </div>
-          </div>
-        </section>
+          </GlowCard>
+        </ScrollReveal>
 
-        <div className="text-center bg-card rounded-lg p-8 border border-border">
-          <h3 className="text-2xl font-bold text-foreground mb-4">
-            {t("about.footer.title")}
-          </h3>
-          <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-            {t("about.footer.content")}
-          </p>
-          <div className="flex gap-4 justify-center flex-wrap">
-            <Button size="lg">{t("about.footer.ctaOne")}</Button>
-            <Button variant="secondary" size="lg">
-              {t("about.footer.ctaTwo")}
-            </Button>
-          </div>
-        </div>
       </div>
     </div>
-  );
+  )
 }

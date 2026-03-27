@@ -108,7 +108,7 @@ export default async function SanctionsPage({
       {/* Back */}
       <Link
         href={`/${locale}/dashboard/${guildId}`}
-        className="inline-flex items-center gap-1.5 text-sm text-text/50 hover:text-text/80 transition-colors mb-6"
+        className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors mb-6"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
         {t("sanctions.backToOverview")}
@@ -118,7 +118,7 @@ export default async function SanctionsPage({
       <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold">{t("sanctions.title")}</h1>
-          <p className="text-sm text-text/50 mt-1">
+          <p className="text-sm text-text-muted mt-1">
             {total.toLocaleString()} {total !== 1 ? t("sanctions.actions") : t("sanctions.action")}
             {actionFilter ? ` · ${actionFilter}s ${t("sanctions.filterOnly")}` : ""}
           </p>
@@ -128,10 +128,10 @@ export default async function SanctionsPage({
         <div className="flex flex-wrap items-center gap-1.5">
           <Link
             href={buildHref(1)}
-            className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
               !actionFilter
-                ? "bg-accent text-white"
-                : "bg-white/5 text-text/60 hover:text-text"
+                ? "bg-accent/15 text-accent border border-accent/30"
+                : "bg-elevated border border-border text-text-muted hover:text-text hover:border-accent/20"
             }`}
           >
             {t("sanctions.all")}
@@ -140,10 +140,10 @@ export default async function SanctionsPage({
             <Link
               key={a}
               href={buildHref(1, a)}
-              className={`px-3 py-1 rounded-full text-xs font-semibold capitalize transition-colors ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition-colors ${
                 actionFilter === a
-                  ? "bg-accent text-white"
-                  : "bg-white/5 text-text/60 hover:text-text"
+                  ? "bg-accent/15 text-accent border border-accent/30"
+                  : "bg-elevated border border-border text-text-muted hover:text-text hover:border-accent/20"
               }`}
             >
               {a.charAt(0).toUpperCase() + a.slice(1)}

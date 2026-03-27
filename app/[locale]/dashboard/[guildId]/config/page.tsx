@@ -57,7 +57,7 @@ export default async function ConfigPage({
       {/* Back */}
       <Link
         href={`/${locale}/dashboard/${guildId}`}
-        className="inline-flex items-center gap-1.5 text-sm text-text/50 hover:text-text/80 transition-colors mb-6"
+        className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors mb-6"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
         {t("config.backToOverview")}
@@ -67,9 +67,9 @@ export default async function ConfigPage({
       <div className="mb-8">
         <h1 className="text-2xl font-bold mb-1">{t("config.title")}</h1>
         {isAdmin ? (
-          <p className="text-sm text-text/50">{t("config.editDesc")}</p>
+          <p className="text-sm text-text-muted">{t("config.editDesc")}</p>
         ) : (
-          <div className="flex items-center gap-2 text-sm text-text/50">
+          <div className="flex items-center gap-2 text-sm text-text-muted">
             <Lock className="h-3.5 w-3.5" />
             {t("config.readOnlyDesc")}
           </div>
@@ -78,7 +78,7 @@ export default async function ConfigPage({
 
       <form action={isAdmin ? saveConfig : undefined} className="space-y-5">
         {CONFIG_FIELD_NAMES.map((name) => (
-          <div key={name} className="rounded-xl bg-card p-4">
+          <div key={name} className="rounded-xl bg-card border border-border p-4">
             <label htmlFor={name} className="block text-sm font-semibold mb-0.5">
               {t(`config.fields.${name}.label` as any)}
             </label>
@@ -89,7 +89,7 @@ export default async function ConfigPage({
               defaultValue={config?.[name] ?? ""}
               readOnly={!isAdmin}
               placeholder={isAdmin ? t("config.notSet") : "—"}
-              className="w-full px-3 py-2 rounded-lg border border-border/50 bg-background text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 placeholder:text-text/25 read-only:opacity-60 read-only:cursor-default transition"
+              className="w-full px-3 py-2 rounded-lg border border-border bg-elevated text-sm focus:outline-none focus:ring-2 focus:ring-accent/40 placeholder:text-text-muted/50 read-only:opacity-60 read-only:cursor-default transition"
             />
           </div>
         ))}

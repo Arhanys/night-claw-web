@@ -101,11 +101,11 @@ function TranscriptModal({ url, title, onClose, openInTab }: { url: string; titl
       onClick={onClose}
     >
       <div
-        className="flex flex-col flex-1 m-3 rounded-2xl overflow-hidden bg-card border border-white/[0.08] shadow-2xl"
+        className="flex flex-col flex-1 m-3 rounded-2xl overflow-hidden bg-card border border-border shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-white/[0.07] shrink-0">
+        <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-border shrink-0">
           <div className="flex items-center gap-2 text-sm font-semibold">
             <FileText className="h-4 w-4 text-accent shrink-0" />
             {title}
@@ -122,7 +122,7 @@ function TranscriptModal({ url, title, onClose, openInTab }: { url: string; titl
             </a>
             <button
               onClick={onClose}
-              className="text-text/40 hover:text-text/80 transition-colors p-1.5 rounded-lg hover:bg-white/5"
+              className="text-text/40 hover:text-text/80 transition-colors p-1.5 rounded-lg hover:bg-elevated"
             >
               <X className="h-4 w-4" />
             </button>
@@ -158,11 +158,11 @@ function TicketModal({
       onClick={onClose}
     >
       <div
-        className="bg-card border border-white/[0.08] rounded-2xl w-full max-w-lg shadow-2xl flex flex-col max-h-[90vh]"
+        className="bg-card border border-border rounded-2xl w-full max-w-lg shadow-2xl flex flex-col max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-white/[0.07] shrink-0">
+        <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-border shrink-0">
           <div className="flex items-center gap-2.5">
             <span
               className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${
@@ -183,7 +183,7 @@ function TicketModal({
           </div>
           <button
             onClick={onClose}
-            className="text-text/40 hover:text-text/80 transition-colors p-1 rounded-lg hover:bg-white/5"
+            className="text-text/40 hover:text-text/80 transition-colors p-1 rounded-lg hover:bg-elevated"
           >
             <X className="h-4 w-4" />
           </button>
@@ -213,7 +213,7 @@ function TicketModal({
             )}
           </div>
 
-          <div className="border-t border-white/[0.07]" />
+          <div className="border-t border-border" />
 
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -240,7 +240,7 @@ function TicketModal({
             </div>
           </div>
 
-          <div className="border-t border-white/[0.07]" />
+          <div className="border-t border-border" />
 
           {/* Transcript */}
           <div className="flex items-center justify-between gap-3">
@@ -327,7 +327,7 @@ export function TicketsList({
             <button
               key={ticket.id}
               onClick={() => { setSelected(ticket); setTranscriptOpen(false) }}
-              className="w-full text-left rounded-xl bg-card ring-1 ring-white/[0.07] p-4 space-y-3 hover:bg-white/[0.03] transition-colors"
+              className="w-full text-left rounded-xl bg-card border border-border p-4 space-y-3 hover:bg-elevated transition-colors"
             >
               <div className="flex items-center justify-between gap-2">
                 <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${
@@ -381,7 +381,7 @@ export function TicketsList({
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-white/[0.07]">
+                <tr className="border-b border-border">
                   <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">Status</th>
                   <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{strings.channel}</th>
                   <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{strings.opener}</th>
@@ -500,7 +500,7 @@ export function TicketsList({
               className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-sm font-medium transition-colors ${
                 !prevHref
                   ? "border-border/20 text-text/20 cursor-not-allowed"
-                  : "border-border/50 hover:bg-white/5 text-text/70 hover:text-text"
+                  : "border-border/50 hover:bg-elevated text-text/70 hover:text-text"
               }`}
             >
               <ChevronLeft className="h-4 w-4" />
@@ -512,7 +512,7 @@ export function TicketsList({
               className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-sm font-medium transition-colors ${
                 !nextHref
                   ? "border-border/20 text-text/20 cursor-not-allowed"
-                  : "border-border/50 hover:bg-white/5 text-text/70 hover:text-text"
+                  : "border-border/50 hover:bg-elevated text-text/70 hover:text-text"
               }`}
             >
               {strings.next}

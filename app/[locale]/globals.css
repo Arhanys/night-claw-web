@@ -2,79 +2,184 @@
 
 @theme {
   --color-background: var(--bg-main);
-  --color-card: var(--bg-card);
-  --color-accent: var(--accent-primary);
+  --color-card:       var(--bg-card);
+  --color-elevated:   var(--bg-elevated);
+  --color-accent:     var(--accent-primary);
   --color-accent-secondary: var(--accent-secondary);
-  --color-text: var(--text-main);
+  --color-text:       var(--text-main);
+  --color-text-muted: var(--text-muted);
+  --color-border:     var(--border-color);
+
+  --font-sans:    var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-syne), ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, "Cascadia Code", monospace;
 }
 
+/* ─── Light mode ─────────────────────────────────── */
 :root {
-  --bg-main: #F8FAFC;
-  --bg-card: #FFFFFF;
-  --accent-primary: #4338CA;
-  --accent-secondary: #059669;
-  --text-main: #0F172A;
+  --bg-main:         #F8FAFC;
+  --bg-card:         #FFFFFF;
+  --bg-elevated:     #F1F5F9;
+  --accent-primary:  #7C3AED;
+  --accent-secondary:#0891B2;
+  --text-main:       #0F172A;
+  --text-muted:      #64748B;
+  --border-color:    rgba(15, 23, 42, 0.08);
 }
 
+/* ─── Dark mode ──────────────────────────────────── */
 .dark {
-  --bg-main: #0B0E14;
-  --bg-card: #151921;
-  --accent-primary: #5865F2;
-  --accent-secondary: #10B981;
-  --text-main: #E2E8F0;
+  --bg-main:         #08090F;
+  --bg-card:         #0D0F17;
+  --bg-elevated:     #13151E;
+  --accent-primary:  #8B5CF6;
+  --accent-secondary:#22D3EE;
+  --text-main:       #E8EAF0;
+  --text-muted:      #6B7280;
+  --border-color:    rgba(255, 255, 255, 0.06);
 }
 
+/* ─── Global heading font ────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+/* ─── Anchor scroll offset for sticky nav ────────── */
+:target,
+h1[id], h2[id], h3[id], h4[id], h5[id], h6[id] {
+  scroll-margin-top: 5rem;
+}
+
+/* ─── Utilities ──────────────────────────────────── */
 @layer utilities {
+
+  /* Gradient text */
+  .gradient-text {
+    background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Hero glow — dual radial: violet + cyan offset */
+  .hero-glow {
+    background:
+      radial-gradient(ellipse 80% 55% at 50% -10%,
+        color-mix(in srgb, var(--accent-primary) 22%, transparent),
+        transparent 70%),
+      radial-gradient(ellipse 40% 30% at 75% -5%,
+        color-mix(in srgb, var(--accent-secondary) 10%, transparent),
+        transparent 60%);
+  }
+
+  /* Section glows */
+  .section-glow-accent {
+    background: radial-gradient(ellipse 70% 100% at 20% 0%,
+      color-mix(in srgb, var(--accent-primary) 12%, transparent),
+      transparent 60%);
+  }
+
+  .section-glow-secondary {
+    background: radial-gradient(ellipse 70% 100% at 80% 0%,
+      color-mix(in srgb, var(--accent-secondary) 12%, transparent),
+      transparent 60%);
+  }
+
+  /* Glow card border */
+  .card-glow-border {
+    box-shadow:
+      0 0 0 1px var(--border-color),
+      0 0 28px -8px color-mix(in srgb, var(--accent-primary) 20%, transparent);
+  }
+
+  .card-glow-border-cyan {
+    box-shadow:
+      0 0 0 1px var(--border-color),
+      0 0 28px -8px color-mix(in srgb, var(--accent-secondary) 20%, transparent);
+  }
+
+  /* Dot grid background */
+  .bg-dot-grid {
+    background-image: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--accent-primary) 25%, transparent) 1px,
+      transparent 1px
+    );
+    background-size: 28px 28px;
+  }
+
+  /* Dashboard page background */
+  .dashboard-bg {
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 0%,
+        color-mix(in srgb, var(--bg-card) 80%, transparent),
+        transparent 100%);
+  }
+
+  /* Underline link animation */
   .link-underline {
     position: relative;
     display: inline-block;
   }
-
-  /* Fix anchor link positioning for sticky navbar */
-  :target {
-    scroll-margin-top: 5rem;
-  }
-
-  h1[id], h2[id], h3[id], h4[id], h5[id], h6[id] {
-    scroll-margin-top: 5rem;
-  }
-
   .link-underline::after {
     content: "";
     position: absolute;
     width: 100%;
     height: 2px;
-    bottom: 0px;
+    bottom: 0;
     left: 0;
-    background-color: var(--color-accent);
+    background-color: var(--accent-primary);
     transform: scaleX(0);
     transform-origin: bottom right;
     transition: transform 0.25s ease-out;
   }
-
   .link-underline:hover::after {
     transform: scaleX(1);
     transform-origin: bottom left;
   }
 
-  .bg-grid-pattern {
-    background-image: radial-gradient(circle, var(--color-accent) 1px, transparent 1px);
-    background-size: 32px 32px;
+  /* Pulsing ring for status indicators */
+  .pulse-ring {
+    position: relative;
+  }
+  .pulse-ring::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 2px solid var(--accent-secondary);
+    opacity: 0;
+    animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+  @keyframes ping {
+    75%, 100% { transform: scale(1.5); opacity: 0; }
+    0% { transform: scale(1); opacity: 0.4; }
   }
 
-  .hero-glow {
-    background: radial-gradient(ellipse 100% 70% at 50% -5%, color-mix(in srgb, var(--accent-primary) 18%, transparent), transparent 65%);
+  /* Shimmer effect */
+  .shimmer {
+    position: relative;
+    overflow: hidden;
   }
-
-  .section-glow-accent {
-    background: radial-gradient(ellipse 70% 100% at 20% 0%, color-mix(in srgb, var(--accent-primary) 10%, transparent), transparent 60%);
+  .shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 40%,
+      color-mix(in srgb, var(--accent-primary) 6%, transparent) 50%,
+      transparent 60%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
   }
-
-  .section-glow-secondary {
-    background: radial-gradient(ellipse 70% 100% at 80% 0%, color-mix(in srgb, var(--accent-secondary) 10%, transparent), transparent 60%);
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
   }
-}
-
-* {
-  scroll-behavior: smooth;
 }

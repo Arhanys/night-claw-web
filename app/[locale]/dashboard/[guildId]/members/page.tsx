@@ -134,14 +134,14 @@ export default async function MembersPage({
         {/* Back */}
         <Link
           href={`/${locale}/dashboard/${guildId}/members`}
-          className="inline-flex items-center gap-1.5 text-sm text-text/50 hover:text-text/80 transition-colors mb-6"
+          className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors mb-6"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           {t("members.backToSearch")}
         </Link>
 
         {/* Profile card */}
-        <div className="flex items-center gap-4 p-5 rounded-2xl bg-card mb-6">
+        <div className="flex items-center gap-4 p-5 rounded-2xl bg-card border border-border mb-6">
           {user ? (
             <>
               <UserAvatar userId={userId} user={user} size={40} />
@@ -216,7 +216,7 @@ export default async function MembersPage({
             name="id"
             type="text"
             placeholder={t("members.searchPlaceholder")}
-            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-border/50 bg-card text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 placeholder:text-text/25 transition"
+            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-border bg-elevated text-sm focus:outline-none focus:ring-2 focus:ring-accent/40 placeholder:text-text-muted/50 transition"
           />
         </div>
         <button
@@ -233,7 +233,7 @@ export default async function MembersPage({
           <h2 className="text-xs font-semibold text-text/40 uppercase tracking-wide mb-3">
             {t("members.recentlySanctioned")}
           </h2>
-          <div className="rounded-2xl bg-card overflow-hidden divide-y divide-white/[0.07]">
+          <div className="rounded-2xl bg-card border border-border overflow-hidden divide-y divide-border">
             {recentlySanctioned.map((entry) => {
               const user = memberMap.get(entry.target_id) ?? null
               const displayName = user?.globalName ?? user?.username ?? null
