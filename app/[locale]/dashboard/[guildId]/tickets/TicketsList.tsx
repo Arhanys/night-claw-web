@@ -128,7 +128,6 @@ function TranscriptModal({ url, title, onClose, openInTab }: { url: string; titl
           src={url}
           className="flex-1 w-full border-0 bg-white"
           title="Ticket transcript"
-          sandbox="allow-scripts allow-same-origin"
         />
       </div>
     </div>
