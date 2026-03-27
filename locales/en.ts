@@ -1,5 +1,3 @@
-import { features, title } from "process";
-
 export default {
     // NAVIGATION BAR
     Nav: {
@@ -303,9 +301,14 @@ export default {
             quickAccess: "Quick access",
             sanctionHistory: "Sanction History",
             sanctionHistoryDesc: "View bans, kicks, mutes & warns",
+            appealsDesc: "Review ban appeal requests",
+            ticketsDesc: "Browse support ticket transcripts",
             configuration: "Configuration",
             configDescAdmin: "View & edit bot settings",
             configDescMod: "View bot settings",
+            superAdmin: "Superadmin",
+            superAdminRole: "Superadmin",
+            superAdminAccess: "Access to all bot servers",
             modTeam: "Moderation Team",
             noMods: "No moderators found.",
             charts: {

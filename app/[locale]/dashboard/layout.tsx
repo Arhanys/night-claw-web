@@ -21,6 +21,7 @@ export default async function DashboardLayout({
         guilds={guilds}
         userName={session.user?.name ?? "User"}
         userImage={session.user?.image ?? null}
+        isSuperAdmin={session.isSuperAdmin ?? false}
       />
       <main className="flex-1 overflow-auto pt-14 md:pt-0">{children}</main>
     </div>

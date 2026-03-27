@@ -5,7 +5,7 @@ import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 import { signOut } from "next-auth/react"
-import { LayoutDashboard, Shield, Settings, LogOut, ChevronRight, ArrowUpLeft, Users, Scale, Ticket, Menu, X } from "lucide-react"
+import { LayoutDashboard, Shield, Settings, LogOut, ChevronRight, ArrowUpLeft, Users, Scale, Ticket, Menu, X, Crown } from "lucide-react"
 import { useCurrentLocale, useScopedI18n } from "@/locales/client"
 import LanguageSelector from "@/components/LanguageSelector"
 
@@ -19,13 +19,14 @@ interface Props {
   guilds: Guild[]
   userName: string
   userImage: string | null
+  isSuperAdmin?: boolean
 }
 
 function iconUrl(guildId: string, icon: string) {
   return `https://cdn.discordapp.com/icons/${guildId}/${icon}.webp?size=64`
 }
 
-export function DashboardSidebar({ guilds, userName, userImage }: Props) {
+export function DashboardSidebar({ guilds, userName, userImage, isSuperAdmin }: Props) {
   const pathname = usePathname()
   const locale = useCurrentLocale()
   const t = useScopedI18n("dashboard")
@@ -171,6 +172,12 @@ export function DashboardSidebar({ guilds, userName, userImage }: Props) {
             <span className="text-sm font-medium truncate flex-1 text-text">
               {userName}
             </span>
+            {isSuperAdmin && (
+              <span className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-amber-500/15 text-amber-400 text-[10px] font-semibold shrink-0">
+                <Crown className="h-2.5 w-2.5" />
+                SA
+              </span>
+            )}
           </div>
           <div className="px-3 py-1.5 mb-0.5">
             <LanguageSelector />

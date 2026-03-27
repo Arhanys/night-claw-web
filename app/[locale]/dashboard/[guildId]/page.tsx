@@ -47,6 +47,7 @@ export default async function GuildOverviewPage({
 
   const t = await getScopedI18n("dashboard")
   const isAdmin = session.adminGuildIds.includes(guildId)
+  const isSuperAdmin = session.isSuperAdmin ?? false
 
   const ninetyDaysAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000)
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
@@ -134,7 +135,7 @@ export default async function GuildOverviewPage({
       href: `/${locale}/dashboard/${guildId}/appeals`,
       icon: Scale,
       label: t("sidebar.appeals"),
-      desc: "Review ban appeal requests",
+      desc: t("overview.appealsDesc"),
       color: "text-yellow-400",
       bg: "bg-yellow-500/10",
     },
@@ -142,7 +143,7 @@ export default async function GuildOverviewPage({
       href: `/${locale}/dashboard/${guildId}/tickets`,
       icon: Ticket,
       label: t("sidebar.tickets"),
-      desc: "Browse support ticket transcripts",
+      desc: t("overview.ticketsDesc"),
       color: "text-accent-secondary",
       bg: "bg-accent-secondary/10",
     },
@@ -177,12 +178,14 @@ export default async function GuildOverviewPage({
           <h1 className="text-2xl font-bold truncate">{guild.name}</h1>
           <span
             className={`inline-flex items-center gap-1.5 text-xs font-semibold mt-1.5 px-2.5 py-1 rounded-full ${
-              isAdmin
+              isSuperAdmin
+                ? "bg-amber-500/15 text-amber-400 border border-amber-500/25"
+                : isAdmin
                 ? "bg-accent/15 text-accent border border-accent/25"
                 : "bg-elevated text-text-muted border border-border"
             }`}
           >
-            {isAdmin ? t("overview.administrator") : t("overview.moderator")}
+            {isSuperAdmin ? t("overview.superAdmin") : isAdmin ? t("overview.administrator") : t("overview.moderator")}
           </span>
         </div>
       </div>
@@ -222,9 +225,11 @@ export default async function GuildOverviewPage({
             <Shield className="h-4 w-4" />
             <span className="text-xs font-semibold uppercase tracking-wide">{t("overview.yourRole")}</span>
           </div>
-          <p className="text-lg font-bold mt-1">{isAdmin ? t("overview.admin") : t("overview.mod")}</p>
+          <p className="text-lg font-bold mt-1">
+            {isSuperAdmin ? t("overview.superAdminRole") : isAdmin ? t("overview.admin") : t("overview.mod")}
+          </p>
           <p className="text-sm text-text-muted mt-1.5">
-            {isAdmin ? t("overview.fullAccess") : t("overview.readOnlyAccess")}
+            {isSuperAdmin ? t("overview.superAdminAccess") : isAdmin ? t("overview.fullAccess") : t("overview.readOnlyAccess")}
           </p>
         </div>
       </div>

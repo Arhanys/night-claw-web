@@ -21,6 +21,15 @@ export interface GuildStats extends GuildBasic {
   approximatePresenceCount: number
 }
 
+/** Fetch all guild IDs that have the bot configured as main servers (not appeal servers). */
+export async function getAllBotGuildIds(): Promise<string[]> {
+  const guilds = await prisma.server_settings.findMany({
+    where: { source_guild_id: null },
+    select: { guild_id: true },
+  })
+  return guilds.map((g) => g.guild_id)
+}
+
 /**
  * Determines which bot-configured guilds the user can access as mod or admin.
  * Called once at login — result is stored in the JWT session.
