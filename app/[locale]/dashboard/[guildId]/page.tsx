@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
-import { fetchGuildStats, fetchGuildModerators, GuildMember } from "@/lib/discord"
+import { fetchGuildStats, fetchGuildModerators, GuildModerator } from "@/lib/discord"
 import { prisma } from "@/lib/prisma"
 import { getScopedI18n } from "@/locales/server"
 import Image from "next/image"
@@ -89,7 +89,7 @@ export default async function GuildOverviewPage({
       }),
     ])
 
-  const moderators: GuildMember[] = config?.mod_role_id
+  const moderators: GuildModerator[] = config?.mod_role_id
     ? await fetchGuildModerators(guildId, config.mod_role_id)
     : []
 

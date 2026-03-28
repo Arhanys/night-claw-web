@@ -130,7 +130,7 @@ export async function fetchGuildBasic(guildId: string): Promise<GuildBasic | nul
   return { id: data.id, name: data.name, icon: data.icon }
 }
 
-export interface GuildMember {
+export interface GuildModerator {
   userId: string
   username: string
   globalName: string | null
@@ -138,10 +138,6 @@ export interface GuildMember {
   avatar: string | null
 }
 
-/**
- * Fetch all members of a guild who hold a specific role.
- * Uses the bot token. Fetches up to 1 000 members (sufficient for mod teams).
- */
 export interface GuildMember extends DiscordUser {
   joinedAt: string | null
 }
@@ -221,7 +217,7 @@ export async function fetchGuildMembersPage(
 export async function fetchGuildModerators(
   guildId: string,
   modRoleId: string
-): Promise<GuildMember[]> {
+): Promise<GuildModerator[]> {
   const res = await fetch(
     `${DISCORD_API}/guilds/${guildId}/members?limit=1000`,
     {

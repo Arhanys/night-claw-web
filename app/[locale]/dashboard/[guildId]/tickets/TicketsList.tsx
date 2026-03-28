@@ -143,11 +143,13 @@ function TranscriptModal({ url, title, onClose, openInTab }: { url: string; titl
 function TicketModal({
   ticket,
   strings,
+  timeLocale,
   onClose,
   onViewTranscript,
 }: {
   ticket: ResolvedTicket
   strings: TicketsStrings
+  timeLocale: string
   onClose: () => void
   onViewTranscript: () => void
 }) {
@@ -302,6 +304,7 @@ export function TicketsList({
         <TicketModal
           ticket={selected}
           strings={strings}
+          timeLocale={timeLocale}
           onClose={() => { setSelected(null); setTranscriptOpen(false) }}
           onViewTranscript={() => setTranscriptOpen(true)}
         />
