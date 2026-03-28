@@ -1,4 +1,30 @@
+import type { Metadata } from "next"
 import { getI18n } from "@/locales/server"
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://nightclaw.xyz"
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const fr = locale === "fr"
+  const title = fr ? "Guide & Commandes" : "Commands & Setup Guide"
+  const description = fr
+    ? "Guide complet de NightClaw : toutes les commandes /ban, /kick, /mute, /warn, /appeal et la configuration de votre serveur Discord."
+    : "Full NightClaw command reference and setup guide. Learn how to use /ban, /kick, /mute, /warn, /appeal and configure your Discord server."
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `${SITE_URL}/${locale}/guide`,
+      languages: { en: `${SITE_URL}/en/guide`, fr: `${SITE_URL}/fr/guide` },
+    },
+    openGraph: { title, description, url: `${SITE_URL}/${locale}/guide` },
+    twitter: { title, description },
+  }
+}
 import { Button } from "@/components/ui/button"
 import GlowCard from "@/components/ui/GlowCard"
 import ScrollReveal from "@/components/marketing/ScrollReveal"

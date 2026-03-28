@@ -38,6 +38,8 @@ interface Props {
     activityTimeline: string
     activityTimelineSub: string
     appealStatus: string
+    allTime: string
+    appealStatusLabels: Record<string, string>
     ticketResolution: string
     ticketResolutionSub: string
     noData: string
@@ -211,7 +213,7 @@ export default function StatsCharts({
       </ChartCard>
 
       {/* Appeal status bars */}
-      <ChartCard title={strings.appealStatus} subtitle="All time">
+      <ChartCard title={strings.appealStatus} subtitle={strings.allTime}>
         {appealTotal === 0 ? (
           <div className="h-24 flex items-center justify-center text-sm text-text-muted">{strings.noData}</div>
         ) : (
@@ -223,7 +225,7 @@ export default function StatsCharts({
               return (
                 <div key={i}>
                   <div className="flex items-center justify-between mb-1.5 text-xs">
-                    <span className={`font-semibold capitalize ${colors.text}`}>{key}</span>
+                    <span className={`font-semibold capitalize ${colors.text}`}>{strings.appealStatusLabels[key] ?? key}</span>
                     <span className="text-text-muted">{a.count} <span className="opacity-50">/ {appealTotal}</span></span>
                   </div>
                   <div className="h-1.5 bg-elevated rounded-full overflow-hidden">

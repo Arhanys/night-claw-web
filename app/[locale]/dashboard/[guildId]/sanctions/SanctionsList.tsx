@@ -94,6 +94,7 @@ export function SanctionModal({
   isAdmin,
   guildId,
   strings,
+  timeLocale,
   onClose,
   onSaved,
   onDeleted,
@@ -102,6 +103,7 @@ export function SanctionModal({
   isAdmin: boolean
   guildId: string
   strings: SanctionsStrings
+  timeLocale: string
   onClose: () => void
   onSaved: (id: number, reason: string | null) => void
   onDeleted: (id: number) => void
@@ -164,7 +166,7 @@ export function SanctionModal({
               <span className="text-sm text-text/40">
                 {new Date(selected.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                 {" · "}
-                {new Date(selected.created_at).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
+                {new Date(selected.created_at).toLocaleTimeString(timeLocale, { hour: "2-digit", minute: "2-digit" })}
               </span>
             )}
           </div>
@@ -255,6 +257,7 @@ export function SanctionsList({
   isAdmin,
   guildId,
   strings,
+  timeLocale,
   pageNum,
   totalPages,
   total,
@@ -265,6 +268,7 @@ export function SanctionsList({
   isAdmin: boolean
   guildId: string
   strings: SanctionsStrings
+  timeLocale: string
   pageNum: number
   totalPages: number
   total: number
@@ -286,6 +290,7 @@ export function SanctionsList({
           isAdmin={isAdmin}
           guildId={guildId}
           strings={strings}
+          timeLocale={timeLocale}
           onClose={() => setSelected(null)}
           onSaved={(id, reason) => {
             setLogs((prev) => prev.map((l) => (l.id === id ? { ...l, reason } : l)))
@@ -451,7 +456,7 @@ export function SanctionsList({
                               {new Date(log.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                             </div>
                             <div className="text-[11px] text-text/35 mt-0.5">
-                              {new Date(log.created_at).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
+                              {new Date(log.created_at).toLocaleTimeString(timeLocale, { hour: "2-digit", minute: "2-digit" })}
                             </div>
                           </>
                         ) : (

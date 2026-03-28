@@ -108,7 +108,7 @@ export default async function SanctionsPage({
       {/* Back */}
       <Link
         href={`/${locale}/dashboard/${guildId}`}
-        className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors mb-6"
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card text-sm text-text/70 hover:text-text hover:bg-elevated transition-colors mb-6"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
         {t("sanctions.backToOverview")}
@@ -157,6 +157,7 @@ export default async function SanctionsPage({
         isAdmin={isAdmin}
         guildId={guildId}
         strings={strings}
+        timeLocale={locale === "fr" ? "fr-FR" : "en-US"}
         pageNum={pageNum}
         totalPages={totalPages}
         total={total}

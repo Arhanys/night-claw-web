@@ -16,6 +16,8 @@ interface Props {
     activityTimeline: string
     activityTimelineSub: string
     appealStatus: string
+    allTime: string
+    appealStatusLabels: Record<string, string>
     ticketResolution: string
     ticketResolutionSub: string
     noData: string

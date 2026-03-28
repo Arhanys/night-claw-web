@@ -40,6 +40,7 @@ export interface TicketsStrings {
   page: string
   of: string
   total: string
+  transcript: string
   noTranscript: string
   viewTranscript: string
   openInTab: string
@@ -57,8 +58,8 @@ function formatDate(iso: string) {
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
 }
 
-function formatTime(iso: string) {
-  return new Date(iso).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })
+function formatTime(iso: string, timeLocale: string) {
+  return new Date(iso).toLocaleTimeString(timeLocale, { hour: "2-digit", minute: "2-digit" })
 }
 
 function UserChip({ userId, user, label, discordIdLabel }: { userId: string; user: UserInfo | null; label: string; discordIdLabel: string }) {
@@ -221,7 +222,7 @@ function TicketModal({
               {ticket.opened_at ? (
                 <>
                   <p className="text-sm text-text/80">{formatDate(ticket.opened_at)}</p>
-                  <p className="text-[11px] text-text/40 mt-0.5">{formatTime(ticket.opened_at)}</p>
+                  <p className="text-[11px] text-text/40 mt-0.5">{formatTime(ticket.opened_at, timeLocale)}</p>
                 </>
               ) : (
                 <p className="text-sm text-text/30 italic">{strings.unknown}</p>
@@ -232,7 +233,7 @@ function TicketModal({
               {ticket.closed_at ? (
                 <>
                   <p className="text-sm text-text/80">{formatDate(ticket.closed_at)}</p>
-                  <p className="text-[11px] text-text/40 mt-0.5">{formatTime(ticket.closed_at)}</p>
+                  <p className="text-[11px] text-text/40 mt-0.5">{formatTime(ticket.closed_at, timeLocale)}</p>
                 </>
               ) : (
                 <p className="text-sm text-text/30 italic">{strings.notClosed}</p>
@@ -276,6 +277,7 @@ function TicketModal({
 export function TicketsList({
   tickets,
   strings,
+  timeLocale,
   pageNum,
   totalPages,
   total,
@@ -284,6 +286,7 @@ export function TicketsList({
 }: {
   tickets: ResolvedTicket[]
   strings: TicketsStrings
+  timeLocale: string
   pageNum: number
   totalPages: number
   total: number
@@ -362,7 +365,7 @@ export function TicketsList({
                 {ticket.transcript_url && (
                   <span className="flex items-center gap-1 text-accent/70">
                     <FileText className="h-3 w-3" />
-                    transcript
+                    {strings.transcript}
                   </span>
                 )}
               </div>
@@ -387,7 +390,7 @@ export function TicketsList({
                   <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{strings.opener}</th>
                   <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{strings.openedAt}</th>
                   <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{strings.closedAt}</th>
-                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">Transcript</th>
+                  <th className="px-5 py-3.5 text-left text-[11px] font-semibold text-text/35 uppercase tracking-widest">{strings.transcript}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/[0.07]">
@@ -450,7 +453,7 @@ export function TicketsList({
                         {ticket.opened_at ? (
                           <>
                             <div className="text-sm text-text/70">{formatDate(ticket.opened_at)}</div>
-                            <div className="text-[11px] text-text/35 mt-0.5">{formatTime(ticket.opened_at)}</div>
+                            <div className="text-[11px] text-text/35 mt-0.5">{formatTime(ticket.opened_at, timeLocale)}</div>
                           </>
                         ) : (
                           <span className="text-sm text-text/40">—</span>
@@ -461,7 +464,7 @@ export function TicketsList({
                         {ticket.closed_at ? (
                           <>
                             <div className="text-sm text-text/70">{formatDate(ticket.closed_at)}</div>
-                            <div className="text-[11px] text-text/35 mt-0.5">{formatTime(ticket.closed_at)}</div>
+                            <div className="text-[11px] text-text/35 mt-0.5">{formatTime(ticket.closed_at, timeLocale)}</div>
                           </>
                         ) : (
                           <span className="text-sm text-text/25 italic">{strings.notClosed}</span>
@@ -472,7 +475,7 @@ export function TicketsList({
                         {ticket.transcript_url ? (
                           <span className="inline-flex items-center gap-1.5 text-xs text-accent/80 font-medium">
                             <FileText className="h-3.5 w-3.5" />
-                            transcript
+                            {strings.transcript}
                           </span>
                         ) : (
                           <span className="text-sm text-text/25 italic">{strings.noTranscript}</span>

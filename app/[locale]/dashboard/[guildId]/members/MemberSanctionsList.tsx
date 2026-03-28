@@ -40,6 +40,7 @@ export function MemberSanctionsList({
   guildId,
   targetUser,
   strings,
+  timeLocale,
   noSanctionsLabel,
   allSanctionsLabel,
 }: {
@@ -48,6 +49,7 @@ export function MemberSanctionsList({
   guildId: string
   targetUser: UserInfo | null
   strings: SanctionsStrings
+  timeLocale: string
   noSanctionsLabel: string
   allSanctionsLabel: string
 }) {
@@ -77,6 +79,7 @@ export function MemberSanctionsList({
           isAdmin={isAdmin}
           guildId={guildId}
           strings={strings}
+          timeLocale={timeLocale}
           onClose={() => setSelectedId(null)}
           onSaved={(id, reason) => {
             setLogs((prev) => prev.map((l) => (l.id === id ? { ...l, reason } : l)))
@@ -143,7 +146,7 @@ export function MemberSanctionsList({
                             {new Date(s.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                           </div>
                           <div className="text-[11px] text-text/35 mt-0.5">
-                            {new Date(s.created_at).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
+                            {new Date(s.created_at).toLocaleTimeString(timeLocale, { hour: "2-digit", minute: "2-digit" })}
                           </div>
                         </>
                       ) : (

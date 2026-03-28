@@ -5,7 +5,7 @@ import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 import { signOut } from "next-auth/react"
-import { LayoutDashboard, Shield, Settings, LogOut, ChevronRight, ArrowUpLeft, Users, Scale, Ticket, Menu, X, Crown } from "lucide-react"
+import { LayoutDashboard, Shield, Settings, LogOut, ChevronRight, ArrowUpLeft, Users, Scale, Ticket, Menu, X, Crown, Search } from "lucide-react"
 import { useCurrentLocale, useScopedI18n } from "@/locales/client"
 import LanguageSelector from "@/components/LanguageSelector"
 
@@ -31,6 +31,10 @@ export function DashboardSidebar({ guilds, userName, userImage, isSuperAdmin }: 
   const locale = useCurrentLocale()
   const t = useScopedI18n("dashboard")
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [guildQuery, setGuildQuery] = useState("")
+  const [showCount, setShowCount] = useState(8)
+
+  const INITIAL_COUNT = 8
 
   useEffect(() => {
     setMobileOpen(false)
@@ -40,12 +44,12 @@ export function DashboardSidebar({ guilds, userName, userImage, isSuperAdmin }: 
   const activeGuildId = guildMatch?.[1] ?? null
 
   const SUB_NAV = [
-    { label: t("sidebar.overview"),  segment: "",         icon: LayoutDashboard },
-    { label: t("sidebar.members"),   segment: "/members", icon: Users },
+    { label: t("sidebar.overview"),  segment: "",           icon: LayoutDashboard },
     { label: t("sidebar.sanctions"), segment: "/sanctions", icon: Shield },
-    { label: t("sidebar.config"),    segment: "/config",  icon: Settings },
-    { label: t("sidebar.appeals"),   segment: "/appeals", icon: Scale },
-    { label: t("sidebar.tickets"),   segment: "/tickets", icon: Ticket },
+    { label: t("sidebar.appeals"),   segment: "/appeals",   icon: Scale },
+    { label: t("sidebar.tickets"),   segment: "/tickets",   icon: Ticket },
+    { label: t("sidebar.members"),   segment: "/members",   icon: Users },
+    { label: t("sidebar.config"),    segment: "/config",    icon: Settings },
   ]
 
   return (
@@ -100,63 +104,107 @@ export function DashboardSidebar({ guilds, userName, userImage, isSuperAdmin }: 
             </p>
           )}
 
-          {guilds.map((guild) => {
-            const isActive = guild.id === activeGuildId
-            return (
-              <div key={guild.id} className="mb-0.5">
-                <Link
-                  href={`/${locale}/dashboard/${guild.id}`}
-                  className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
-                    isActive
-                      ? "bg-accent/10 text-accent border-l-2 border-accent -ml-0.5 pl-[11px]"
-                      : "text-text-muted hover:bg-elevated hover:text-text"
-                  }`}
-                >
-                  {guild.icon ? (
-                    <Image
-                      src={iconUrl(guild.id, guild.icon)}
-                      alt={guild.name}
-                      width={24}
-                      height={24}
-                      className="rounded-full shrink-0 ring-1 ring-border"
-                    />
-                  ) : (
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${
-                      isActive ? "bg-accent/20 text-accent" : "bg-elevated text-text-muted"
-                    }`}>
-                      {guild.name[0]}
-                    </div>
-                  )}
-                  <span className="truncate flex-1">{guild.name}</span>
-                  {isActive && <ChevronRight className="h-3.5 w-3.5 shrink-0 opacity-50" />}
-                </Link>
+          {guilds.length > INITIAL_COUNT && (
+            <div className="relative mb-2">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-text/30 pointer-events-none" />
+              <input
+                type="text"
+                value={guildQuery}
+                onChange={(e) => { setGuildQuery(e.target.value); setShowCount(INITIAL_COUNT) }}
+                placeholder="Search servers…"
+                className="w-full pl-8 pr-3 py-1.5 rounded-lg border border-border bg-elevated text-xs focus:outline-none focus:ring-1 focus:ring-accent/40 placeholder:text-text/30 transition"
+              />
+            </div>
+          )}
 
-                {/* Sub-nav for active guild */}
-                {isActive && (
-                  <div className="mt-0.5 ml-4 pl-4 border-l border-accent/25 space-y-0.5 mb-1">
-                    {SUB_NAV.map(({ label, segment, icon: Icon }) => {
-                      const href = `/${locale}/dashboard/${guild.id}${segment}`
-                      const isSubActive = pathname === href
-                      return (
-                        <Link
-                          key={segment}
-                          href={href}
-                          className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs transition-all ${
-                            isSubActive
-                              ? "text-accent font-semibold bg-accent/8"
-                              : "text-text-muted hover:text-text hover:bg-elevated/60"
-                          }`}
-                        >
-                          <Icon className="h-3.5 w-3.5 shrink-0" />
-                          {label}
-                        </Link>
-                      )
-                    })}
-                  </div>
+          {(() => {
+            const q = guildQuery.trim().toLowerCase()
+            const filtered = q
+              ? guilds.filter((g) => g.name.toLowerCase().includes(q) || g.id.includes(q))
+              : guilds
+
+            // Always keep the active guild visible when not searching
+            const visible = q ? filtered : [
+              ...filtered.slice(0, showCount),
+              ...(activeGuildId && !filtered.slice(0, showCount).find((g) => g.id === activeGuildId)
+                ? filtered.filter((g) => g.id === activeGuildId)
+                : []),
+            ]
+
+            const hasMore = !q && filtered.length > showCount
+
+            return (
+              <>
+                {visible.map((guild) => {
+                  const isActive = guild.id === activeGuildId
+                  return (
+                    <div key={guild.id} className="mb-0.5">
+                      <Link
+                        href={`/${locale}/dashboard/${guild.id}`}
+                        className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
+                          isActive
+                            ? "bg-accent/10 text-accent border-l-2 border-accent -ml-0.5 pl-[11px]"
+                            : "text-text-muted hover:bg-elevated hover:text-text"
+                        }`}
+                      >
+                        {guild.icon ? (
+                          <Image
+                            src={iconUrl(guild.id, guild.icon)}
+                            alt={guild.name}
+                            width={24}
+                            height={24}
+                            className="rounded-full shrink-0 ring-1 ring-border"
+                          />
+                        ) : (
+                          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${
+                            isActive ? "bg-accent/20 text-accent" : "bg-elevated text-text-muted"
+                          }`}>
+                            {guild.name[0]}
+                          </div>
+                        )}
+                        <span className="truncate flex-1">{guild.name}</span>
+                        {isActive && <ChevronRight className="h-3.5 w-3.5 shrink-0 opacity-50" />}
+                      </Link>
+
+                      {/* Sub-nav for active guild */}
+                      {isActive && (
+                        <div className="mt-0.5 ml-4 pl-4 border-l border-accent/25 space-y-0.5 mb-1">
+                          {SUB_NAV.map(({ label, segment, icon: Icon }) => {
+                            const href = `/${locale}/dashboard/${guild.id}${segment}`
+                            const isSubActive = pathname === href
+                            return (
+                              <Link
+                                key={segment}
+                                href={href}
+                                className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs transition-all ${
+                                  isSubActive
+                                    ? "text-accent font-semibold bg-accent/8"
+                                    : "text-text-muted hover:text-text hover:bg-elevated/60"
+                                }`}
+                              >
+                                <Icon className="h-3.5 w-3.5 shrink-0" />
+                                {label}
+                              </Link>
+                            )
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
+
+                {hasMore && (
+                  <button
+                    type="button"
+                    onClick={() => setShowCount((c) => c + INITIAL_COUNT)}
+                    className="w-full mt-1 px-3 py-1.5 rounded-xl text-xs text-text/40 hover:text-text/70 hover:bg-elevated transition-colors text-center"
+                  >
+                    +{filtered.length - showCount} more
+                  </button>
                 )}
-              </div>
+              </>
             )
-          })}
+          })()}
         </nav>
 
         {/* User footer */}

@@ -116,6 +116,12 @@ export default async function GuildOverviewPage({
     activityTimeline: t("overview.charts.activityTimeline"),
     activityTimelineSub: t("overview.charts.activityTimelineSub"),
     appealStatus: t("overview.charts.appealStatus"),
+    allTime: t("overview.charts.allTime"),
+    appealStatusLabels: {
+      open:     t("appeals.statuses.open"),
+      accepted: t("appeals.statuses.accepted"),
+      refused:  t("appeals.statuses.refused"),
+    },
     ticketResolution: t("overview.charts.ticketResolution"),
     ticketResolutionSub: t("overview.charts.ticketResolutionSub"),
     noData: t("overview.charts.noData"),

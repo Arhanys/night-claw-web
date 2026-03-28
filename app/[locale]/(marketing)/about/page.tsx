@@ -1,4 +1,30 @@
+import type { Metadata } from "next"
 import { getI18n } from "@/locales/server"
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://nightclaw.xyz"
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const fr = locale === "fr"
+  const title = fr ? "À propos de NightClaw" : "About NightClaw"
+  const description = fr
+    ? "Découvrez NightClaw, le bot de modération Discord pensé pour les modérateurs. Notre mission : rendre la modération simple, puissante et accessible."
+    : "Learn about NightClaw, the Discord moderation bot built for server moderators. Our mission: make moderation simple, powerful, and accessible."
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `${SITE_URL}/${locale}/about`,
+      languages: { en: `${SITE_URL}/en/about`, fr: `${SITE_URL}/fr/about` },
+    },
+    openGraph: { title, description, url: `${SITE_URL}/${locale}/about` },
+    twitter: { title, description },
+  }
+}
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import GlowCard from "@/components/ui/GlowCard"
