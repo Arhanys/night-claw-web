@@ -1,12 +1,13 @@
 import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
-import { fetchDiscordUser, fetchDiscordUsers, DiscordUser } from "@/lib/discord"
+import { fetchDiscordUser, fetchDiscordUsers, fetchGuildMembersPage, DiscordUser } from "@/lib/discord"
 import { getScopedI18n } from "@/locales/server"
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowLeft, Search, UserX } from "lucide-react"
+import { ArrowLeft, UserX } from "lucide-react"
 import { MemberSanctionsList, MemberLog } from "./MemberSanctionsList"
+import { MembersList } from "./MembersList"
 
 interface ModLog {
   id: number
@@ -18,9 +19,10 @@ interface ModLog {
   guild_id: string | null
 }
 
-interface GroupByResult {
+interface SanctionCount {
   target_id: string
   _count: { id: number }
+  _max: { created_at: Date | null }
 }
 
 const ACTION_STYLE: Record<string, { pill: string; dot: string; label: string }> = {
@@ -64,10 +66,10 @@ export default async function MembersPage({
   searchParams,
 }: {
   params: Promise<{ locale: string; guildId: string }>
-  searchParams: Promise<{ id?: string }>
+  searchParams: Promise<{ id?: string; cursors?: string }>
 }) {
   const { locale, guildId } = await params
-  const { id: searchId } = await searchParams
+  const { id: searchId, cursors: cursorsParam } = await searchParams
 
   const session = await auth()
   if (!session?.accessibleGuildIds.includes(guildId)) redirect(`/${locale}/dashboard`)
@@ -134,10 +136,10 @@ export default async function MembersPage({
         {/* Back */}
         <Link
           href={`/${locale}/dashboard/${guildId}/members`}
-          className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors mb-6"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card text-sm text-text/70 hover:text-text hover:bg-elevated transition-colors mb-6"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
-          {t("members.backToSearch")}
+          {t("members.backToMembers")}
         </Link>
 
         {/* Profile card */}
@@ -181,6 +183,7 @@ export default async function MembersPage({
           guildId={guildId}
           targetUser={targetUser}
           strings={strings}
+          timeLocale={locale === "fr" ? "fr-FR" : "en-US"}
           noSanctionsLabel={t("members.noSanctions")}
           allSanctionsLabel={t("members.allSanctions")}
         />
@@ -188,82 +191,65 @@ export default async function MembersPage({
     )
   }
 
-  // ── Search + recently sanctioned list ──────────────────────────────────────
-  const recentlySanctioned = await prisma.mod_logs.groupBy({
-    by: ["target_id"],
-    where: { guild_id: guildId },
-    _count: { id: true },
-    orderBy: { _count: { id: "desc" } },
-    take: 30,
-  }) as unknown as GroupByResult[]
+  // ── All members list ────────────────────────────────────────────────────────
+  const cursors = cursorsParam ? cursorsParam.split(",").filter(Boolean) : []
+  const after = cursors[cursors.length - 1]
 
-  const memberIds = recentlySanctioned.map((r) => r.target_id)
-  const memberMap = await fetchDiscordUsers(memberIds)
+  const [{ members: discordMembers, hasMore }, sanctionCounts] = await Promise.all([
+    fetchGuildMembersPage(guildId, after),
+    prisma.mod_logs.groupBy({
+      by: ["target_id"],
+      where: { guild_id: guildId },
+      _count: { id: true },
+      _max: { created_at: true },
+    }) as unknown as Promise<SanctionCount[]>,
+  ])
+
+  const countMap = new Map(sanctionCounts.map((s) => [s.target_id, s._count.id]))
+  const nextCursor = discordMembers[discordMembers.length - 1]?.id ?? null
+
+  const members = discordMembers.map((m) => ({
+    id: m.id,
+    username: m.username,
+    globalName: m.globalName,
+    avatar: m.avatar,
+    joinedAt: m.joinedAt,
+    sanctionCount: countMap.get(m.id) ?? 0,
+  }))
 
   return (
     <div className="p-4 sm:p-6 md:p-8 max-w-3xl">
-      {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold mb-1">{t("members.title")}</h1>
         <p className="text-sm text-text/50">{t("members.subtitle")}</p>
       </div>
 
-      {/* Search form */}
-      <form method="GET" className="flex gap-2 mb-8">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text/30 pointer-events-none" />
-          <input
-            name="id"
-            type="text"
-            placeholder={t("members.searchPlaceholder")}
-            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-border bg-elevated text-sm focus:outline-none focus:ring-2 focus:ring-accent/40 placeholder:text-text-muted/50 transition"
-          />
-        </div>
-        <button
-          type="submit"
-          className="px-4 py-2.5 rounded-xl bg-accent text-white text-sm font-semibold hover:bg-accent/80 active:scale-[0.98] transition-all shrink-0"
-        >
-          {t("members.search")}
-        </button>
-      </form>
-
-      {/* Recently sanctioned */}
-      {recentlySanctioned.length > 0 && (
-        <div>
-          <h2 className="text-xs font-semibold text-text/40 uppercase tracking-wide mb-3">
-            {t("members.recentlySanctioned")}
-          </h2>
-          <div className="rounded-2xl bg-card border border-border overflow-hidden divide-y divide-border">
-            {recentlySanctioned.map((entry) => {
-              const user = memberMap.get(entry.target_id) ?? null
-              const displayName = user?.globalName ?? user?.username ?? null
-              const count = entry._count.id
-              return (
-                <Link
-                  key={entry.target_id}
-                  href={`/${locale}/dashboard/${guildId}/members?id=${entry.target_id}`}
-                  className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.025] transition-colors"
-                >
-                  <UserAvatar userId={entry.target_id} user={user} size={32} />
-                  <div className="min-w-0 flex-1">
-                    {displayName ? (
-                      <>
-                        <p className="text-sm font-medium truncate">{displayName}</p>
-                        <p className="text-xs text-text/35 font-mono truncate">@{user?.username}</p>
-                      </>
-                    ) : (
-                      <p className="text-sm font-mono text-text/50 truncate">{entry.target_id}</p>
-                    )}
-                  </div>
-                  <span className="text-xs font-semibold text-text/50 bg-white/5 px-2.5 py-1 rounded-full shrink-0">
-                    {count} {count !== 1 ? t("members.sanctions") : t("members.sanction")}
-                  </span>
-                </Link>
-              )
-            })}
-          </div>
-        </div>
-      )}
+      <MembersList
+        members={members}
+        locale={locale}
+        guildId={guildId}
+        cursors={cursors}
+        hasMore={hasMore}
+        nextCursor={nextCursor}
+        strings={{
+          searchPlaceholder: t("members.searchPlaceholder"),
+          search: t("members.search"),
+          noSanctionedMembers: t("members.noSanctionedMembers"),
+          noSearchResults: t("members.noSearchResults"),
+          sanction: t("members.sanction"),
+          sanctions: t("members.sanctions"),
+          total: t("members.total"),
+          page: t("members.page"),
+          of: t("members.of"),
+          previous: t("members.previous"),
+          next: t("members.next"),
+          sortSanctionsDesc: t("members.sortSanctionsDesc"),
+          sortSanctionsAsc: t("members.sortSanctionsAsc"),
+          sortRecent: t("members.sortRecent"),
+          nextBatch: t("members.nextBatch"),
+          prevBatch: t("members.prevBatch"),
+        }}
+      />
     </div>
   )
 }

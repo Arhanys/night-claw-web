@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { getI18n } from "@/locales/server"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -7,6 +8,52 @@ import ScrollReveal from "@/components/marketing/ScrollReveal"
 import GlowCard from "@/components/ui/GlowCard"
 import SectionHeading from "@/components/ui/SectionHeading"
 import { Zap, ShieldCheck, Crosshair, ArrowRight, Terminal, CheckCircle2 } from "lucide-react"
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://nightclaw.xyz"
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const fr = locale === "fr"
+  const title = fr
+    ? "Bot de modération Discord gratuit — Bans, Appeals & Logs"
+    : "Free Discord Moderation Bot — Bans, Appeals & Mod Logs"
+  const description = fr
+    ? "NightClaw modère votre serveur Discord avec /ban, /kick, /mute, /warn, un système d'appels de sanctions, des tickets et un tableau de bord web complet. Gratuit."
+    : "NightClaw moderates your Discord server with /ban, /kick, /mute, /warn, a ban appeal system, tickets, mod logs, and a full web dashboard. Free to use."
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `${SITE_URL}/${locale}`,
+      languages: { en: `${SITE_URL}/en`, fr: `${SITE_URL}/fr` },
+    },
+    openGraph: { title, description, url: `${SITE_URL}/${locale}` },
+    twitter: { title, description },
+  }
+}
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "NightClaw",
+  applicationCategory: "UtilitiesApplication",
+  operatingSystem: "Discord",
+  url: SITE_URL,
+  description:
+    "NightClaw is a free Discord moderation bot with ban/kick/mute/warn commands, ban appeal system, ticket system, mod logs, and a full web dashboard.",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  featureList: [
+    "Ban, kick, mute, warn commands",
+    "Ban appeal system with web dashboard",
+    "Ticket system",
+    "Moderation logs",
+    "Multi-language support (EN/FR)",
+  ],
+}
 
 export default async function Home() {
   const t = await getI18n()
@@ -37,6 +84,10 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       {/* ─── Hero ──────────────────────────────────────────── */}
       <section className="hero-glow relative pt-24 pb-32 md:pt-32 md:pb-44">

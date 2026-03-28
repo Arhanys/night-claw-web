@@ -15,6 +15,11 @@
   --font-mono:    "JetBrains Mono", ui-monospace, "Cascadia Code", monospace;
 }
 
+/* ─── Pre-hydration dark background (prevents white flash) ──────────────── */
+html {
+  background-color: #08090F;
+}
+
 /* ─── Light mode ─────────────────────────────────── */
 :root {
   --bg-main:         #F8FAFC;
@@ -63,6 +68,7 @@ h1[id], h2[id], h3[id], h4[id], h5[id], h6[id] {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    padding-bottom: 0.15em;
   }
 
   /* Hero glow — dual radial: violet + cyan offset */

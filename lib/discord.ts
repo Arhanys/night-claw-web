@@ -142,6 +142,82 @@ export interface GuildMember {
  * Fetch all members of a guild who hold a specific role.
  * Uses the bot token. Fetches up to 1 000 members (sufficient for mod teams).
  */
+export interface GuildMember extends DiscordUser {
+  joinedAt: string | null
+}
+
+/** Fetch all members of a guild, paginating through up to 20,000 members. Cached 5 min. */
+export async function fetchAllGuildMembers(guildId: string): Promise<GuildMember[]> {
+  const all: GuildMember[] = []
+  let after: string | undefined
+
+  for (let page = 0; page < 20; page++) {
+    const url = new URL(`${DISCORD_API}/guilds/${guildId}/members`)
+    url.searchParams.set("limit", "1000")
+    if (after) url.searchParams.set("after", after)
+
+    const res = await fetch(url.toString(), {
+      headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` },
+      next: { revalidate: 300 },
+    })
+    if (!res.ok) break
+
+    const members: Array<{
+      user: { id: string; username: string; global_name?: string; avatar?: string }
+      joined_at: string | null
+    }> = await res.json()
+
+    if (members.length === 0) break
+
+    for (const m of members) {
+      all.push({
+        id: m.user.id,
+        username: m.user.username,
+        globalName: m.user.global_name ?? null,
+        avatar: m.user.avatar ?? null,
+        joinedAt: m.joined_at ?? null,
+      })
+    }
+
+    if (members.length < 1000) break
+    after = members[members.length - 1].user.id
+  }
+
+  return all
+}
+
+/** Fetch one page of up to 1,000 guild members. Pass `after` (a user ID) to cursor-paginate. */
+export async function fetchGuildMembersPage(
+  guildId: string,
+  after?: string
+): Promise<{ members: GuildMember[]; hasMore: boolean }> {
+  const url = new URL(`${DISCORD_API}/guilds/${guildId}/members`)
+  url.searchParams.set("limit", "1000")
+  if (after) url.searchParams.set("after", after)
+
+  const res = await fetch(url.toString(), {
+    headers: { Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}` },
+    next: { revalidate: 300 },
+  })
+  if (!res.ok) return { members: [], hasMore: false }
+
+  const data: Array<{
+    user: { id: string; username: string; global_name?: string; avatar?: string }
+    joined_at: string | null
+  }> = await res.json()
+
+  return {
+    members: data.map((m) => ({
+      id: m.user.id,
+      username: m.user.username,
+      globalName: m.user.global_name ?? null,
+      avatar: m.user.avatar ?? null,
+      joinedAt: m.joined_at ?? null,
+    })),
+    hasMore: data.length === 1000,
+  }
+}
+
 export async function fetchGuildModerators(
   guildId: string,
   modRoleId: string

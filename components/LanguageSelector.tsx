@@ -1,47 +1,67 @@
-"use client";
+"use client"
 
-import { useRouter, usePathname } from "next/navigation";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Globe } from "lucide-react";
+import { useRouter, usePathname } from "next/navigation"
+import { Globe, ChevronDown } from "lucide-react"
+import { useState, useRef, useEffect } from "react"
 
 const languages = [
-  { code: "en", name: "English", flag: "🇺🇸" },
-  { code: "fr", name: "Français", flag: "🇫🇷" },
-];
+  { code: "en", label: "EN", name: "English", flag: "🇺🇸" },
+  { code: "fr", label: "FR", name: "Français", flag: "🇫🇷" },
+]
 
 export default function LanguageSelector() {
-  const router = useRouter();
-  const pathname = usePathname();
+  const router = useRouter()
+  const pathname = usePathname()
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
 
-  // Extract current locale from pathname
-  const currentLocale = pathname.split("/")[1] || "en";
+  const currentLocale = pathname.split("/")[1] || "en"
+  const current = languages.find((l) => l.code === currentLocale) ?? languages[0]
 
-  const handleLanguageChange = (locale: string) => {
-    // Replace the current locale in the pathname with the new one
-    const segments = pathname.split("/");
-    segments[1] = locale;
-    const newPath = segments.join("/");
-    router.push(newPath);
-  };
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
+
+  const handleSelect = (code: string) => {
+    const segments = pathname.split("/")
+    segments[1] = code
+    router.push(segments.join("/"))
+    setOpen(false)
+  }
 
   return (
-    <Select value={currentLocale} onValueChange={handleLanguageChange}>
-      <SelectTrigger className="w-auto gap-2 bg-background hover:bg-muted border-none">
-        <SelectValue placeholder="Select language" />
-      </SelectTrigger>
-      <SelectContent className="bg-background">
-        {languages.map((language) => (
-          <SelectItem key={language.code} value={language.code}>
-            {language.flag} {language.name}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  );
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-1 p-2 rounded-lg text-text-muted hover:text-text hover:bg-elevated transition-all"
+        aria-label="Select language"
+      >
+        <Globe className="h-4 w-4" />
+        <span className="text-xs font-medium">{current.label}</span>
+        <ChevronDown className={`h-3 w-3 transition-transform duration-150 ${open ? "rotate-180" : ""}`} />
+      </button>
+      {open && (
+        <div className="absolute right-0 top-full mt-1.5 w-36 bg-card border border-border rounded-xl shadow-lg shadow-black/20 overflow-hidden z-50 py-1">
+          {languages.map((lang) => (
+            <button
+              key={lang.code}
+              onClick={() => handleSelect(lang.code)}
+              className={`flex items-center gap-2.5 w-full px-3 py-2 text-sm transition-colors ${
+                lang.code === currentLocale
+                  ? "text-text bg-elevated"
+                  : "text-text-muted hover:text-text hover:bg-elevated"
+              }`}
+            >
+              <span>{lang.flag}</span>
+              {lang.name}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
 }
