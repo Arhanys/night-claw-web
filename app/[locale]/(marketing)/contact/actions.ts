@@ -31,7 +31,7 @@ export async function sendContactEmail(
     await resend.emails.send({
       from:     "NightClaw Contact <contact@nightclaw.dev>",
       to:       "ahranys@nightclaw.dev",
-      reply_to: `${name} <${email}>`,
+      replyTo:  `${name} <${email}>`,
       subject:  `[Contact] ${subject}`,
       text:     `From: ${name} <${email}>\nSubject: ${subject}\n\n${body}`,
       html: `<!DOCTYPE html>
