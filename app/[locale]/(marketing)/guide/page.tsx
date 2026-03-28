@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { getI18n } from "@/locales/server"
+import { getI18n, getCurrentLocale } from "@/locales/server"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://nightclaw.xyz"
 
@@ -25,6 +25,7 @@ export async function generateMetadata({
     twitter: { title, description },
   }
 }
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import GlowCard from "@/components/ui/GlowCard"
 import ScrollReveal from "@/components/marketing/ScrollReveal"
@@ -85,6 +86,7 @@ function SectionTitle({ accent = "violet", children }: { accent?: "violet" | "cy
 
 export default async function Guide() {
   const t = await getI18n()
+  const locale = await getCurrentLocale()
 
   const generalCommands: CommandProps[] = [
     { name: t("guide.generalCommands.help.command"), description: t("guide.generalCommands.help.description") },
@@ -94,6 +96,9 @@ export default async function Guide() {
         { name: t("guide.generalCommands.setup.badges.badgeOne"), type: t("guide.optional") },
         { name: t("guide.generalCommands.setup.badges.badgeTwo"), type: t("guide.optional") },
         { name: t("guide.generalCommands.setup.badges.badgeThree"), type: t("guide.optional") },
+        { name: t("guide.generalCommands.setup.badges.badgeFour"), type: t("guide.optional") },
+        { name: t("guide.generalCommands.setup.badges.badgeFive"), type: t("guide.optional") },
+        { name: t("guide.generalCommands.setup.badges.badgeSix"), type: t("guide.optional") },
       ],
       description: t("guide.generalCommands.setup.description"),
     },
@@ -240,9 +245,14 @@ export default async function Guide() {
           <GlowCard glow="violet" padding="p-8" hover={false}>
             <h3 className="text-lg font-bold mb-2">{t("guide.help.title")}</h3>
             <p className="text-text-muted mb-5 leading-relaxed">{t("guide.help.text")}</p>
-            <Button variant="outline" size="sm" asChild>
-              <a href="#top">{t("guide.help.button")}</a>
-            </Button>
+            <div className="flex gap-3 flex-wrap">
+              <Button variant="outline" size="sm" asChild>
+                <a href="#top">{t("guide.help.button")}</a>
+              </Button>
+              <Button variant="secondary" size="sm" asChild>
+                <Link href={`/${locale}/contact`}>{t("guide.help.contactButton")}</Link>
+              </Button>
+            </div>
           </GlowCard>
         </ScrollReveal>
 

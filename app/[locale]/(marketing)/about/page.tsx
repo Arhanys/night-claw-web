@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { getI18n } from "@/locales/server"
+import { getI18n, getCurrentLocale } from "@/locales/server"
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://nightclaw.xyz"
 
@@ -36,6 +36,7 @@ const reasonIcons = [Rocket, Zap, Wrench]
 
 export default async function About() {
   const t = await getI18n()
+  const locale = await getCurrentLocale()
 
   return (
     <div className="min-h-screen bg-background">
@@ -181,9 +182,11 @@ export default async function About() {
                   <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Button variant="secondary" size="lg">
-                {t("about.footer.ctaTwo")}
-              </Button>
+              <Link href={`/${locale}/contact`}>
+                <Button variant="secondary" size="lg">
+                  {t("about.footer.ctaTwo")}
+                </Button>
+              </Link>
             </div>
           </GlowCard>
         </ScrollReveal>

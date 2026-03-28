@@ -5,8 +5,15 @@ export default {
         guide: "Guide",
         about: "About",
         contact: "Contact",
+        dashboard: "Dashboard",
         addToDiscord: "Add to Discord",
         logIn: "Log In",
+    },
+    // FOOTER
+    footer: {
+        tagline: "Moderation made simple.",
+        copyright: "© 2025 NightClaw. All rights reserved.",
+        backToTop: "Back to top",
     },
     // HOME PAGE
     home : {
@@ -105,8 +112,11 @@ export default {
                         badgeOne: "log_channel",
                         badgeTwo: "mod_role",
                         badgeThree: "confess_channel",
+                        badgeFour: "appeal_invite",
+                        badgeFive: "main_invite",
+                        badgeSix: "source_guild",
                     },
-                    description: "Configure your server with optional logging channel, moderator role, and confession channel for optimal bot performance.",
+                    description: "Configure your server with optional logging channel, moderator role, confession channel, and ban appeal settings for optimal bot performance.",
                 },
                 ticketpanel: {
                     command: "ticketpanel",
@@ -208,8 +218,9 @@ export default {
             },
             help: {
                 title: "Need More Help?",
-                text: "If you have any questions or need further assistance, feel free to reach out directly to me on Discord ( ahranys#0758 )",
-                button: "Back to the top ↑"
+                text: "If you have any questions or need further assistance, feel free to reach out via the contact page or directly on Discord ( ahranys0758 )",
+                button: "Back to the top ↑",
+                contactButton: "Contact page"
             }
         },
         about: {

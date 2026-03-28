@@ -5,8 +5,15 @@ export default {
         guide: "Guide",
         about: "À propos",
         contact: "Contact",
+        dashboard: "Tableau de bord",
         addToDiscord: "Ajouter à Discord",
         logIn: "Se connecter",
+    },
+    // FOOTER
+    footer: {
+        tagline: "La modération simplifiée.",
+        copyright: "© 2025 NightClaw. Tous droits réservés.",
+        backToTop: "Retour en haut",
     },
     // HOME PAGE
     home : {
@@ -105,8 +112,11 @@ export default {
                         badgeOne: "log_channel",
                         badgeTwo: "mod_role",
                         badgeThree: "confess_channel",
+                        badgeFour: "appeal_invite",
+                        badgeFive: "main_invite",
+                        badgeSix: "source_guild",
                     },
-                    description: "Configurez votre serveur avec un channel de logs, un rôle de modérateur et un canal de confession pour des performances optimales du bot.",
+                    description: "Configurez votre serveur avec un channel de logs, un rôle de modérateur, un canal de confession et les paramètres d'appel de ban pour des performances optimales du bot.",
                 },
                 ticketpanel: {
                     command: "ticketpanel",
@@ -208,8 +218,9 @@ export default {
             },
             help: {
                 title: "Besoin de plus d'aide ?",
-                text: "Si vous avez des questions ou besoin d'une assistance supplémentaire, n'hésitez pas à me contacter directement sur Discord ( ahranys#0758 )",
-                button: "Retour en haut ↑"
+                text: "Si vous avez des questions ou besoin d'une assistance supplémentaire, n'hésitez pas à me contacter via la page de contact ou directement sur Discord ( ahranys0758 )",
+                button: "Retour en haut ↑",
+                contactButton: "Page de contact"
             }
         },
         about: {

@@ -166,6 +166,12 @@ h1[id], h2[id], h3[id], h4[id], h5[id], h6[id] {
     0% { transform: scale(1); opacity: 0.4; }
   }
 
+  /* Footer border sweep */
+  @keyframes footer-sweep {
+    0%   { background-position: 150% 0; }
+    100% { background-position: -50% 0; }
+  }
+
   /* Shimmer effect */
   .shimmer {
     position: relative;

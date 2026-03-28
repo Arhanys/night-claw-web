@@ -152,7 +152,7 @@ export default async function Home() {
       </section>
 
       {/* ─── Features ──────────────────────────────────────── */}
-      <section className="py-24 bg-background">
+      <section className="py-24">
         <div className="container mx-auto px-6">
           <ScrollReveal>
             <SectionHeading
@@ -185,7 +185,7 @@ export default async function Home() {
       </section>
 
       {/* ─── Stats ─────────────────────────────────────────── */}
-      <section className="py-16 bg-background">
+      <section className="py-16">
         <div className="container mx-auto px-6">
           <ScrollReveal className="grid grid-cols-2 md:grid-cols-4 gap-4" stagger={0.1}>
             {stats.map((s, i) => (
@@ -204,7 +204,7 @@ export default async function Home() {
       </section>
 
       {/* ─── Commands Preview ───────────────────────────────── */}
-      <section className="py-24 bg-background">
+      <section className="py-24">
         <div className="container mx-auto px-6">
           <ScrollReveal>
             <SectionHeading
@@ -286,6 +286,8 @@ export default async function Home() {
       {/* ─── CTA ───────────────────────────────────────────── */}
       <section className="hero-glow py-28 relative">
         <div className="absolute inset-0 bg-dot-grid opacity-[0.03] pointer-events-none" />
+        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none" />
         <div className="container mx-auto px-6 relative z-10">
           <ScrollReveal y={20}>
             <GlowCard
