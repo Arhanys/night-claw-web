@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { BOT_INVITE_URL } from "@/lib/constants"
 import AnimatedHero from "@/components/marketing/AnimatedHero"
+import DashboardPreview from "@/components/marketing/DashboardPreview"
 import ScrollReveal from "@/components/marketing/ScrollReveal"
 import GlowCard from "@/components/ui/GlowCard"
 import SectionHeading from "@/components/ui/SectionHeading"
@@ -282,6 +283,9 @@ export default async function Home() {
           </ScrollReveal>
         </div>
       </section>
+
+      {/* ─── Dashboard Preview ──────────────────────────────── */}
+      <DashboardPreview />
 
       {/* ─── CTA ───────────────────────────────────────────── */}
       <section className="hero-glow py-28 relative">
